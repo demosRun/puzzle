@@ -58,12 +58,12 @@ owo.script = {
   },
   "game": {
     "data": {
-      "picture": "./static/resource/2.png",
+      "picture": "./static/resource/2.jpg",
       "difficulty": 1,
       "width": 750,
-      "height": 1500,
-      "imageWidth": 264,
-      "imageHeight": 396,
+      "height": 1508,
+      "imageWidth": 530,
+      "imageHeight": 840,
       "imageRatio": null,
       "app": null,
       "cliparts": [],
@@ -136,7 +136,8 @@ owo.script = {
         name: 'clipart',
         url: './static/resource/clipart.png'
       }]).load(function () {
-        var shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade']);
+        var shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade']); // 设置背景
+
         shade.set({
           alpha: .99,
           width: _this2.data.width,
@@ -163,8 +164,8 @@ owo.script = {
         // 生成拼图的底层纹理 
         var originBase = new PIXI.Sprite(PIXI.utils.TextureCache[_this3.data.picture]); // 设置尺寸
 
-        originBase.width = window.innerWidth;
-        originBase.height = window.innerHeight; // console.log(originBase)
+        originBase.width = _this3.data.imageWidth;
+        originBase.height = _this3.data.imageHeight; // console.log(originBase)
         // this.base 挂载原始图片的快照 
 
         _this3.base = originBase.generateCanvasTexture(_this3.data.app.renderer); // 拼图的底片 
@@ -172,6 +173,7 @@ owo.script = {
         _this3.negative = new PIXI.Sprite(_this3.base);
 
         _this3.negative.set({
+          width: _this3.data.imageWidth,
           x: _this3.data.puzzle.x,
           y: _this3.data.puzzle.y,
           pivotX: _this3.data.puzzle.pivotX,
@@ -196,7 +198,8 @@ owo.script = {
             return _this3["break"]();
           }
         });
-      };
+      }; // 判断拼图是否已经加载过
+
 
       PIXI.loader.resources[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad);
     },
@@ -519,7 +522,7 @@ owo.script = {
       */
       // 按照难度剪裁后的宽度
 
-      var width = this.data.imageWidth / (this.data.col * 235 / 300 - 65 * 2 / 300) >> 0;
+      var width = this.data.imageWidth / (this.data.col * 235 / 300) >> 0;
       var clipWidth = width * 65 / 300 >> 0;
       console.log("\u62FC\u56FE\u957F\u5BBD: " + width);
       this.data.clipart = {

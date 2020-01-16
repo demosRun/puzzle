@@ -6,15 +6,15 @@
 <script>
   module.exports = {
     data: {
-      picture: '@|2.png|',
+      picture: '@|2.jpg|',
       // 难度
       difficulty: 1,
       // 窗口尺寸
       width: 750,
-      height: 1500,
+      height: 1508,
       // 拼图尺寸
-      imageWidth: 300 * .88 >> 0,
-      imageHeight: 450 * .88 >> 0,
+      imageWidth: 530,
+      imageHeight: 840,
       imageRatio: null,
       // PIXI实例
       app: null,
@@ -83,6 +83,7 @@
       // 加载必须图片
       loader.add([{name: 'shade', url: '@|shade.jpg|'}, {name: 'clipart', url: '@|clipart.png|'}]).load(() => {
         let shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade'])
+        // 设置背景
         shade.set({
           alpha: .99, 
           width: this.data.width, 
@@ -104,14 +105,15 @@
         // 生成拼图的底层纹理 
         let originBase = new PIXI.Sprite(PIXI.utils.TextureCache[this.data.picture])
         // 设置尺寸
-        originBase.width = window.innerWidth
-        originBase.height = window.innerHeight
+        originBase.width = this.data.imageWidth
+        originBase.height = this.data.imageHeight
         // console.log(originBase)
         // this.base 挂载原始图片的快照 
         this.base = originBase.generateCanvasTexture(this.data.app.renderer)
         // 拼图的底片 
         this.negative = new PIXI.Sprite(this.base)
         this.negative.set({
+          width: this.data.imageWidth,
           x: this.data.puzzle.x, 
           y: this.data.puzzle.y, 
           pivotX: this.data.puzzle.pivotX, 
@@ -137,6 +139,7 @@
           }
         )
       }
+      // 判断拼图是否已经加载过
       PIXI.loader.resources[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad)
     },
     // 销毁所有拼块
@@ -456,7 +459,7 @@
         @ 镂空 / 拼块宽 = 65 / 300
       */
       // 按照难度剪裁后的宽度
-      const width = this.data.imageWidth / (this.data.col * 235 / 300 - 65 * 2 / 300) >> 0
+      const width = this.data.imageWidth / (this.data.col * 235 / 300) >> 0
       
       const clipWidth = width * 65 / 300 >> 0
       console.log(`拼图长宽: ${width}`)
