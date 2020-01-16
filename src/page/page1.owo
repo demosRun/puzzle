@@ -1,0 +1,34 @@
+<template lang="pug">
+.page-1
+  .start(o-tap="startGame") 开始游戏
+</template>
+
+<script>
+  module.exports = {
+    created: function () {
+
+    },
+    startGame: function () {
+      owo.go('game')
+    }
+  }
+</script>
+
+
+<style lang="less">
+.start {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: darkviolet;
+  color: white;
+  font-size: 40px;
+  line-height: 50px;
+  text-align: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+</style>

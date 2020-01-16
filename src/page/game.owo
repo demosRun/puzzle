@@ -1,0 +1,593 @@
+<template lang="pug">
+.game
+  canvas#puzzleGame.puzzle_game
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      picture: '@|2.png|',
+      // 难度
+      difficulty: 1,
+      // 窗口尺寸
+      width: 750,
+      height: 1500,
+      // 拼图尺寸
+      imageWidth: 300 * .88 >> 0,
+      imageHeight: 450 * .88 >> 0,
+      imageRatio: null,
+      // PIXI实例
+      app: null,
+      // 拼图数组
+      cliparts: [],
+      isOff: false,
+      puzzle: null,
+      imageRatio: null,
+      clipart: {},
+      col: 0,
+      row: 0,
+      // 拼图总数
+      total: 0
+    },
+    created: function () {
+      
+      // 设置难度
+      this.setDifficulty()
+      // 图片与视窗的比例
+      this.data.imageRatio = this.data.imageWidth / this.data.width
+      console.log(`图片比例: ${this.data.imageRatio}`)
+      this.data.app = new PIXI.Application({
+        width: this.data.width, 
+        height: this.data.height, 
+        transparent: true, 
+        view: document.getElementById('puzzleGame'), 
+        antialias: true
+      })
+      this.eventHandle()
+      this.init()
+    },
+    eventHandle: function () {
+      // 事件兼容
+      if(window.hasOwnProperty('ontouchstart') === true) {
+        this.touchstart = 'touchstart'
+        this.touchmove = 'touchmove'
+        this.touchend = 'touchend'
+        this.tap = 'tap'
+      }
+      else {
+        this.touchstart = 'mousedown'
+        this.touchmove = 'mousemove'
+        this.touchend = 'mouseup'
+        this.tap = 'click'
+      }
+      this.data.app.view.addEventListener(this.touchstart, e => e.preventDefault())
+
+      // 做挂起监听
+      document.addEventListener('visibilitychange', e => {
+        e.hidden === true ? this.pause() : this.data.isOff !== true && this.resume()
+      }, true)
+    },
+    init: function () {
+      // 拼图容器
+      this.data.puzzle = new PIXI.Container()
+      this.data.puzzle.set({
+        x: this.data.width / 2, 
+        y: this.data.height / 2, 
+        pivotX: this.data.imageWidth / 2, 
+        pivotY: this.data.imageHeight / 2 
+      })
+      // 加入舞台
+      this.data.app.stage.addChild(this.data.puzzle)
+
+      let loader = new PIXI.loaders.Loader()
+      // 加载必须图片
+      loader.add([{name: 'shade', url: '@|shade.jpg|'}, {name: 'clipart', url: '@|clipart.png|'}]).load(() => {
+        let shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade'])
+        shade.set({
+          alpha: .99, 
+          width: this.data.width, 
+          height: this.data.height
+        })
+        this.data.app.stage.addChildAt(shade, 0)
+        this.loaded = true
+      })
+      this.start()
+    },
+    start: function () {
+      // 销毁上次的拼块
+      this.destroyCliparts()
+      // 清空所有动画
+      TweenMax.killAll()
+      // 如果暂停了，恢复
+      this.data.isOff === true && this.turnOn()
+      let afterLoad = () => {
+        // 生成拼图的底层纹理 
+        let originBase = new PIXI.Sprite(PIXI.utils.TextureCache[this.data.picture])
+        // 设置尺寸
+        originBase.width = window.innerWidth
+        originBase.height = window.innerHeight
+        // console.log(originBase)
+        // this.base 挂载原始图片的快照 
+        this.base = originBase.generateCanvasTexture(this.data.app.renderer)
+        // 拼图的底片 
+        this.negative = new PIXI.Sprite(this.base)
+        this.negative.set({
+          x: this.data.puzzle.x, 
+          y: this.data.puzzle.y, 
+          pivotX: this.data.puzzle.pivotX, 
+          pivotY: this.data.puzzle.pivotY, 
+          alpha: .2, 
+          visible: false
+        })
+
+        this.data.app.stage.addChildAt(this.negative, 1)
+        this.clip()
+        // 拼图收缩
+        TweenMax.fromTo(
+          this.data.puzzle, 1, 
+          {
+            scaleX: 1 / this.data.imageRatio, 
+            scaleY: 1 / this.data.imageRatio
+          }, 
+          {
+            scaleX: 1, 
+            scaleY: 1, 
+            // 拼图分散后，倒计时开始
+            onComplete: ()=> this.break()
+          }
+        )
+      }
+      PIXI.loader.resources[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad)
+    },
+    // 销毁所有拼块
+    destroyCliparts: function () {
+      this.data.cliparts.forEach(clipart => {
+        let {
+          sprite, 
+          selected, 
+          sprite: {parent: parentA}, 
+          selected: {parent: parentB}
+        } = clipart
+        sprite.destroy()
+        selected.destroy()
+        parentA !== null && parentA !== this.data.puzzle && parentA.destroy()
+        parentB !== null && parentB !== this.data.puzzle && parentB.destroy()
+      })
+      this.negative && this.negative.destroy()
+    },
+    turnOn: function () {
+      this.resume()
+      this.switch.texture = this.off
+      this.data.isOff = false
+      this.data.app.renderer.render(this.data.app.stage)
+    },
+    turnOff: function () {
+      this.pause()
+      this.switch.texture = this.on
+      this.data.isOff = true
+      this.data.app.renderer.render(this.data.app.stage)
+    },
+    // 将图像剪裁成拼图碎片
+    clip: function () {
+      // 清空 cliparts
+      this.data.cliparts = []
+      let x = 0
+      let y = 0
+      for(let row = 0; row < this.data.row; ++row) { 
+        x = 0
+        for(let col = 0; col < this.data.col; ++col) { 
+          let clipart = {
+            index: row * this.data.col + col, 
+            width: this.data.clipart.width, 
+            height: this.data.clipart.height, 
+            x: x, 
+            y: y
+          }
+          let mask = new PIXI.Sprite(PIXI.utils.TextureCache['clipart'])
+          this.data.app.stage.addChild(mask)
+          mask.width = mask.height = this.data.clipart.width
+          if(0 === row) {
+            clipart.height -= this.data.clipart.clipWidth
+            mask.y = -this.data.clipart.clipWidth
+          }
+          if(0 === col) {
+            clipart.width -= this.data.clipart.clipWidth
+            mask.x = -this.data.clipart.clipWidth
+          }
+          // 对底纹进行裁剪
+          { 
+            let x = clipart.x
+            let y = clipart.y
+            let width = clipart.width
+            let height = clipart.height
+            if(x + width > this.base.width) {
+              width = this.base.width - x
+            }
+            if(y + height > this.base.height) {
+              height = this.base.height - y
+            }
+            // 拼块
+            clipart.sprite = new PIXI.Sprite(
+              new PIXI.Texture(
+                this.base, 
+                new PIXI.Rectangle(x, y, width, height)
+              )
+            )
+            // 被选中的拼块
+            clipart.selected = new PIXI.Sprite(clipart.sprite.texture)
+          } 
+          // console.log(col, row, x, y)
+          this.data.cliparts.push(clipart)
+          clipart.sprite.set(
+            {
+              left: x,  
+              top: y, 
+              mask: mask, 
+              cacheAsBitmap: true 
+            }
+          )
+          clipart.selected.set(
+            { 
+              mask: mask, 
+              cacheAsBitmap: true 
+            }
+          )
+          this.data.puzzle.addChild(clipart.sprite)
+
+          // 下一个拼块的 x 坐标
+          x += clipart.width - this.data.clipart.clipWidth
+          if(col === this.data.col - 1) { 
+            // 下一行拼块的 y 坐标
+            y += clipart.height - this.data.clipart.clipWidth
+          } 
+        } 
+      }
+    },
+    // 打散拼块
+    break: function () {
+      // this.data.puzzle 的坐标
+      let bounds = this.data.puzzle.getBounds()
+      let [x, y] = [bounds.x, bounds.y]
+      this.gridProps = {
+        width: this.data.width, 
+        height: this.data.height, 
+        // 最小面积
+        cell: {
+          width: this.data.clipart.width * .8
+        }, 
+        // 标记禁区
+        rectangles: [ 
+          // 中心拼图底图区
+          {
+            x: (this.data.width - this.data.imageWidth) / 2, 
+            y: (this.data.height- this.data.imageHeight) / 2, 
+            width: this.data.imageWidth, 
+            height: this.data.imageHeight
+          }
+        ]
+      }
+      // console.log('--------------')
+      // console.log(this.gridProps)
+      let grid = new Gridistribution(this.gridProps)
+      // 提取随机格子
+      let cells = grid.pick(this.data.cliparts.length)
+      let count = 0
+      let width = this.gridProps.cell.width
+      while(cells.length === 0 && ++count < 10) { 
+        // 面积不够，取一半值
+        width = width * .8
+        this.gridProps.cell.width = width
+        grid.reset(this.gridProps)
+        cells = grid.pick(this.data.cliparts.length)
+      }
+
+      // 显示底片
+      this.negative.visible = true
+
+      // 手指下的拼块（multiple touch）
+      let activeCliparts = []
+
+      // 起始坐标（multiple touch）
+      let startPositions = []
+
+      // 舞台添加事件
+      this.data.app.stage.interactive = true
+      this.data.app.stage.on(
+        this.touchmove,
+        ({
+          data, data: { global: endPosition, identifier }
+        }) => {
+        const activeClipart = activeCliparts[identifier] || null
+        const startPosition = startPositions[identifier] || null
+        if(activeClipart !== null && startPosition !== null) { 
+          if(--activeClipart.negativeCount >= 0) {
+            activeClipart.rotate += activeClipart.negativeRotate
+          }
+          let left = activeClipart.x0 + endPosition.x - startPosition.x
+          let top = activeClipart.y0 + endPosition.y - startPosition.y
+          // 侧滑会导致负坐标直接调用touchend
+          if(left < -this.data.puzzle.x) {
+            touchendHandle({ data })
+            return 
+          }
+          activeClipart.selected.set(
+            {
+              rotate: activeClipart.rotate, 
+              left: left, 
+              top: top
+            }
+          )
+        }
+      })
+
+      let touchendHandle = ({
+        data: { identifier }
+      }) => {
+        const activeClipart = activeCliparts[identifier] || null
+        if(activeClipart === null) return 
+        // 吸附效果 
+        if(Math.abs(activeClipart.x - activeClipart.selected.left) <= 15 && Math.abs(activeClipart.y - activeClipart.selected.top) <= 15) {
+          activeClipart.selected.rotate = 0
+          activeClipart.selected.left = activeClipart.x
+          activeClipart.selected.top = activeClipart.y
+          // 锁定
+          activeClipart.lock = true
+        }
+        // 初始坐标值变化
+        activeClipart.x0 = activeClipart.selected.left
+        activeClipart.y0 = activeClipart.selected.top
+
+        // 正常拼块与选中拼块属性同步
+        activeClipart.sprite.set(
+          {
+            top: activeClipart.selected.top, 
+            left: activeClipart.selected.left, 
+            rotate: activeClipart.selected.rotate
+          }
+        )
+
+        // 当前索引
+        let index = activeClipart.selected.parent.getChildIndex(activeClipart.selected)
+
+        // 移除选中拼块
+        this.data.puzzle.removeChild(activeClipart.selected)
+        // 将拼块安装到对应位置上
+        if(activeClipart.lock === true) {
+          this.fit(activeClipart)
+        }
+        // 替换成正常拼块
+        else {
+          this.data.puzzle.addChildAt(activeClipart.sprite, index)
+        } 
+
+        // 清空对象
+        delete activeCliparts[identifier]
+        delete startPositions[identifier]
+      }
+
+      this.data.app.stage.on(this.touchend, touchendHandle)
+
+      // 动画数组 
+      let tweens = []
+      
+      // 分布
+      this.data.cliparts.forEach((clipart, index) => { 
+        // 拼块
+        let sprite = clipart.sprite
+        // 选中拼块
+        let selected = clipart.selected
+        // 开启点击检测
+        sprite.interactive = true
+        // 添加事件
+        sprite.on(this.touchstart, ({ data: { global: position, identifier } }) => {
+          // 暂停中
+          if(this.paused === true) return 
+          // 固定
+          if(clipart.lock === true) { 
+            // 禁止交互
+            sprite.interactive = false
+            return
+          }
+          let parent = sprite.parent
+          // 移除当前 sprite
+          parent.removeChild(sprite)
+          // 最高索引值
+          let maxIndex = Math.max(parent.children.length - 1, 0)
+          // 替换成 selected 
+          parent.addChildAt(selected, maxIndex)
+
+          // 拼块需要摆正 
+          if(selected.rotate !== 0) { 
+            selected.needFitRotation = true
+            let {x, y} = selected.toLocal(position)
+            selected.origin = sprite.origin = [x, y]
+            // origin会引起盒子位置变化，以下是修正位置
+            clipart.x0 += selected.boxOffsetX
+            clipart.y0 += selected.boxOffsetY
+            selected.set({left: clipart.x0, top: clipart.y0})
+          } 
+          activeCliparts[identifier] = clipart
+          startPositions[identifier] = {x: position.x, y: position.y}
+        })
+        clipart.rotate = (Math.random() - .5) * Math.PI / 4
+
+        clipart.x0 = cells[index].x - x
+        clipart.y0 = cells[index].y - y
+        
+        // 边拖边回正角度参数
+        clipart.negativeCount = 10
+        clipart.negativeRotate = -clipart.rotate / clipart.negativeCount
+
+        // 拼块的属性
+        let props = {
+          left: clipart.x0, 
+          top: clipart.y0, 
+          rotate: clipart.rotate
+        }
+
+        // 拼块
+        // TweenMax.to(sprite, .6, props)
+        tweens.push(TweenMax.to(sprite, .3, props))
+        // 选中拼块信息同步
+        selected.set(props)
+      })
+      // 返回 Promise
+      return new Promise(
+        (resolve) => {
+          let tl = new TimelineLite()
+          tl.add(tweens, 0, 'start', .01).call(() => resolve())
+        }
+      )
+    },
+    // 设置难度
+    setDifficulty: function () {
+      // 行列数生成
+      this.data.col = this.data.difficulty * 2
+      this.data.row = this.data.difficulty * 3
+      console.log(`合适的行数: ${this.data.row}, 合适的列数: ${this.data.col}`)
+      // 总数
+      this.data.total = this.data.col * this.data.row
+      console.log(`拼图总数: ${this.data.total}`)
+      /*
+        @ 计算拼块的尺寸
+        @ 原始大小: 300x300
+        @ 镂空尺寸为 65
+        @ (拼图宽 + 2个镂空) / 列数 = 拼块宽 - 镂空
+        @ 镂空 / 拼块宽 = 65 / 300
+      */
+      // 按照难度剪裁后的宽度
+      const width = this.data.imageWidth / (this.data.col * 235 / 300 - 65 * 2 / 300) >> 0
+      
+      const clipWidth = width * 65 / 300 >> 0
+      console.log(`拼图长宽: ${width}`)
+      this.data.clipart = {
+        width,
+        height: width,
+        clipWidth
+      }
+    },
+    // 安装拼块
+    fit: function (clipart) {
+      // 当前拼块索引
+      let index = clipart.index
+      // 左边拼块
+      let leftClipart = index % this.data.col === 0 ? {lock: false} : this.data.cliparts[index - 1]
+      // 右边拼块
+      let rightClipart = index % this.data.col === this.data.col - 1 ? {lock: false} : this.data.cliparts[index + 1]
+      // 上边拼块
+      let upClipart = index < this.data.col ? {lock: false} : this.data.cliparts[index - this.data.col]
+      // 下边的拼块
+      let downClipart = index / this.data.col >> 0 === this.data.row - 1 ? {lock: false} : this.data.cliparts[index + this.data.col]
+      // 容器
+      let parent = null
+      // 左拼块存在
+      if(leftClipart.lock === true) { 
+        parent = leftClipart.sprite.parent
+      }
+      // 右拼块存在
+      if(rightClipart.lock === true) { 
+        if(parent === null) {
+          parent = rightClipart.sprite.parent
+        }
+        // 合并容器
+        else {
+          let parentB = rightClipart.sprite.parent
+          if(parentB === null) console.log('报错了', rightClipart, rightClipart.sprite, rightClipart.selected)
+          if(parent !== parentB) {
+            let children = parentB.children
+            while(children.length > 0) {
+              parent.addChild(children[0])
+            } 
+            // 销毁
+            parentB.destroy();  
+          }
+        }
+      }
+      // 上边拼块存在
+      if(upClipart.lock === true) { 
+        if(parent === null) {
+          parent = upClipart.sprite.parent
+        }
+        // 合并容器
+        else { 
+          let parentB = upClipart.sprite.parent
+          if(parentB === null) console.log('报错了',upClipart, upClipart.sprite, upClipart.selected)
+          if(parent !== parentB) {
+            let children = parentB.children
+            while(children.length > 0) {
+              parent.addChild(children[0])
+            } 
+            // 销毁
+            parentB.destroy();  
+          }
+        }
+      }
+      // 下边拼块存在
+      if(downClipart.lock === true) { 
+        if(parent === null) {
+          parent = downClipart.sprite.parent
+        }
+        // 合并容器
+        else {
+          let parentB = downClipart.sprite.parent
+          if(parentB === null) console.log('报错了', downClipart, downClipart.sprite, downClipart.selected)
+          if(parent !== parentB) {
+            let children = parentB.children
+            while(children.length > 0) {
+              parent.addChild(children[0])
+            } 
+            // 销毁
+            parentB.destroy();  
+          }
+        }
+      }
+
+      // 在一个空位置
+      if(parent === null) {
+        parent = new PIXI.Container()
+        // 与 puzzle 容器保持一致
+        parent.set(
+          {
+            x: this.data.puzzle.x, 
+            y: this.data.puzzle.y, 
+            pivotX: this.data.puzzle.pivotX, 
+            pivotY: this.data.puzzle.pivotY, 
+            scaleX: this.data.puzzle.scaleX, 
+            scaleY: this.data.puzzle.scaleY
+          }
+        )
+        this.data.app.stage.addChildAt(parent, 2)
+      }
+
+      // 当前拼块安装到对应的容器
+      parent.addChild(clipart.sprite)
+
+      // 容器的动画
+      parent.tween && parent.tween.kill()
+      parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, ease: Linear.easeNone})
+
+      // 判断游戏是否通关
+      console.log(this.data.puzzle.children)
+      if(this.data.puzzle.children.length === 0) {
+        alert('恭喜通关!')
+      }
+    },
+    // 暂停
+    pause: function () { 
+      this.paused = true
+      TweenMax.pauseAll()
+      this.data.app.ticker.stop()
+    },
+    // 恢复
+    resume: function () { 
+      this.paused = false
+      TweenMax.resumeAll()
+      this.data.app.ticker.start()
+    },
+  }
+</script>
+
+
+<style lang="less">
+
+</style>
