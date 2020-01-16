@@ -13,7 +13,7 @@
       width: 750,
       height: 1508,
       // 拼图尺寸
-      imageWidth: 530,
+      imageWidth: 520,
       imageHeight: 840,
       imageRatio: null,
       // PIXI实例
@@ -174,11 +174,13 @@
     clip: function () {
       // 清空 cliparts
       this.data.cliparts = []
-      let x = 0
       let y = 0
-      for(let row = 0; row < this.data.row; ++row) { 
-        x = 0
-        for(let col = 0; col < this.data.col; ++col) { 
+      this.data.col++
+      this.data.row++
+      for(let row = 0; row < this.data.row; row++) { 
+        let x = 0
+        for(let col = 0; col < this.data.col; col++) {
+          // 拼图块
           let clipart = {
             index: row * this.data.col + col, 
             width: this.data.clipart.width, 
@@ -186,6 +188,7 @@
             x: x, 
             y: y
           }
+          // 设置拼图属性
           let mask = new PIXI.Sprite(PIXI.utils.TextureCache['clipart'])
           this.data.app.stage.addChild(mask)
           mask.width = mask.height = this.data.clipart.width
@@ -193,6 +196,11 @@
             clipart.height -= this.data.clipart.clipWidth
             mask.y = -this.data.clipart.clipWidth
           }
+          // console.log(this.data.row, row + 1)
+          // if (this.data.row === row + 1) {
+          //   clipart.height += this.data.clipart.clipWidth
+          //   mask.y = 0
+          // }
           if(0 === col) {
             clipart.width -= this.data.clipart.clipWidth
             mask.x = -this.data.clipart.clipWidth

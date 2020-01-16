@@ -62,7 +62,7 @@ owo.script = {
       "difficulty": 1,
       "width": 750,
       "height": 1508,
-      "imageWidth": 530,
+      "imageWidth": 520,
       "imageHeight": 840,
       "imageRatio": null,
       "app": null,
@@ -233,20 +233,23 @@ owo.script = {
     "clip": function clip() {
       // 清空 cliparts
       this.data.cliparts = [];
-      var x = 0;
       var y = 0;
+      this.data.col++;
+      this.data.row++;
 
-      for (var row = 0; row < this.data.row; ++row) {
-        x = 0;
+      for (var row = 0; row < this.data.row; row++) {
+        var x = 0;
 
-        for (var col = 0; col < this.data.col; ++col) {
+        for (var col = 0; col < this.data.col; col++) {
+          // 拼图块
           var clipart = {
             index: row * this.data.col + col,
             width: this.data.clipart.width,
             height: this.data.clipart.height,
             x: x,
             y: y
-          };
+          }; // 设置拼图属性
+
           var mask = new PIXI.Sprite(PIXI.utils.TextureCache['clipart']);
           this.data.app.stage.addChild(mask);
           mask.width = mask.height = this.data.clipart.width;
@@ -254,7 +257,12 @@ owo.script = {
           if (0 === row) {
             clipart.height -= this.data.clipart.clipWidth;
             mask.y = -this.data.clipart.clipWidth;
-          }
+          } // console.log(this.data.row, row + 1)
+          // if (this.data.row === row + 1) {
+          //   clipart.height += this.data.clipart.clipWidth
+          //   mask.y = 0
+          // }
+
 
           if (0 === col) {
             clipart.width -= this.data.clipart.clipWidth;
