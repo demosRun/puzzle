@@ -1,6 +1,7 @@
 <template lang="pug">
 .game
   canvas#puzzleGame.puzzle_game
+  canvas#fireworks
 </template>
 
 <script>
@@ -196,11 +197,6 @@
             clipart.height -= this.data.clipart.clipWidth
             mask.y = -this.data.clipart.clipWidth
           }
-          // console.log(this.data.row, row + 1)
-          // if (this.data.row === row + 1) {
-          //   clipart.height += this.data.clipart.clipWidth
-          //   mask.y = 0
-          // }
           if(0 === col) {
             clipart.width -= this.data.clipart.clipWidth
             mask.x = -this.data.clipart.clipWidth
@@ -580,7 +576,17 @@
       // 判断游戏是否通关
       console.log(this.data.puzzle.children)
       if(this.data.puzzle.children.length === 0) {
-        alert('恭喜通关!')
+        this.$dom.fireworks.style.display = 'block'
+        setTimeout(() => {
+          new Fireworks({
+            canvas: document.getElementById('fireworks'),
+            callback: function () {
+              alert('恭喜通关!')
+              this.$dom.fireworks.style.display = 'none'
+            }
+          })
+        }, 0);
+        
       }
     },
     // 暂停
@@ -600,5 +606,13 @@
 
 
 <style lang="less">
-
+#fireworks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  display: none;
+}
 </style>

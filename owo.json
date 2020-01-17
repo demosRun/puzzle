@@ -94,6 +94,11 @@
 			"src": "./src/resource/pixi-extra-filters.js"
 		},
 		{
+			"name": "surprise",
+			"src": "./src/resource/surprise.js",
+			"resource": true
+		},
+		{
 			"name": "main",
 			"src": "./src/main.js",
 			"resource": true
