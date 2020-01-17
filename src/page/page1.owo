@@ -4,15 +4,52 @@
     .lable 难度
     input(type="number" o-value="owo.script.game.data.difficulty")
   .start(o-tap="startGame") 开始游戏
+  .mouse(o-touchstart="start" o-touchend="end" o-touchcancel="end") 按住我
+  .text 撒大苏打
 </template>
 
 <script>
   module.exports = {
+    data: {
+      list: [
+        '解决办法',
+        '问题原因',
+        '加载更多',
+        '解决办法',
+        '问题原因',
+        '加载更多',
+        '加载更多',
+        '解决办法',
+        '加载更多',
+        '解决办法',
+        '问题原因',
+        '问题原因',
+        '加载更多',
+        '解决办法',
+        '问题原因',
+      ],
+      clock: null,
+      listInd: 0
+    },
     created: function () {
 
     },
     startGame: function () {
       owo.go('game')
+    },
+    start: function () {
+      this.$target.classList.add('active')
+      const dom = owo.query('.text')[0]
+      this.data.clock = setInterval(() => {
+        if (this.data.listInd == this.data.list.length - 1) {
+          this.data.listInd = 0
+        }
+        dom.innerText = this.data.list[this.data.listInd++]
+      }, 100)
+    },
+    end: function () {
+      clearInterval(this.data.clock)
+      this.$target.classList.remove('active')
     }
   }
 </script>
@@ -44,5 +81,20 @@
   input {
     font-size: 40px;
   }
+}
+.mouse {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 40%;
+  background-color: burlywood;
+}
+.mouse.active {
+  background-color: yellow;
+}
+.text {
+  position: absolute;
+  bottom: 40%;
+  font-size: 40px;
 }
 </style>

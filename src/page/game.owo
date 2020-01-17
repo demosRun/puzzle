@@ -86,7 +86,7 @@
         let shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade'])
         // 设置背景
         shade.set({
-          alpha: .99, 
+          alpha: 1, 
           width: this.data.width, 
           height: this.data.height
         })
@@ -574,13 +574,14 @@
       parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, ease: Linear.easeNone})
 
       // 判断游戏是否通关
-      console.log(this.data.puzzle.children)
+      // console.log(this.data.puzzle.children)
       if(this.data.puzzle.children.length === 0) {
         this.$dom.fireworks.style.display = 'block'
+        console.log(this.$dom)
         setTimeout(() => {
           new Fireworks({
             canvas: document.getElementById('fireworks'),
-            callback: function () {
+            callback: () => {
               alert('恭喜通关!')
               this.$dom.fireworks.style.display = 'none'
             }

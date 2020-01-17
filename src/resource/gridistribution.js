@@ -4,7 +4,7 @@ class Gridistribution{
 	}
 	// 初始化
 	init({width, height, cell = {width: 10}, rectangles = []}) {
-    console.log(width, height, cell)
+    // console.log(width, height, cell)
 		// 格子的高默认与它的宽一样
 		cell.height === undefined && (cell.height = cell.width); 
 		// 列数
@@ -12,8 +12,8 @@ class Gridistribution{
     
 		// 行数
     let row = height / cell.height >> 0;
-    console.log(`行数: ${row} 列数: ${col}`)
-    console.log(cell, col, row, width, height)
+    // console.log(`行数: ${row} 列数: ${col}`)
+    // console.log(cell, col, row, width, height)
     // 宽高修正
     cell.width = width / col
     cell.height = height / row

@@ -1,0 +1,97 @@
+<template lang="pug">
+.loading-page
+  .loading-box
+    img.loading(src="@|loading.png|" o-animation="turn")
+    p 听说爱「拼」的人更能实现愿望哦！
+    .num 100%
+</template>
+
+<script>
+  module.exports = {
+    data: {
+      imgList: [
+        '@|clipart.png|'
+      ]
+    },
+    show: function () {
+      const mum = owo.query('.num')[0]
+      this.preloadImages(this.data.imgList, (e) => {
+        setTimeout(() => {
+          owo.go('page1', '', '', '', '', true)
+        }, 800)
+      }, (num) => {
+        mum.innerHTML = num + '%'
+      })
+    },
+    preloadImage: function (src, successFn) {
+      var image = new Image()
+      image.src = src
+      image.onload = function () {
+        successFn && successFn(src)
+      }
+      image.onerror = function (error) {
+        successFn && successFn(src)
+      }
+    },
+    preloadImages: function (srcs, doneFn, progressFn) {
+      if (!Array.isArray(srcs)) {
+        console.log('第一个参数只能是一个数组')
+      } else {
+        var allCount = srcs.length
+        var doneCount = 0
+        srcs.forEach((srcItem) => {
+          this.preloadImage(srcItem, function () {
+            doneCount++
+            progressFn && progressFn(Math.ceil(100 * doneCount / allCount))
+            if (doneCount === allCount) {
+              doneFn && doneFn()
+            }
+          })
+        })
+      }
+    }
+  }
+</script>
+
+
+<style lang="less">
+.loading-page {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10%;
+  bottom: 0;
+  margin: auto;
+  background-color: #e32a2a;
+  background-image: url('@|loading-bg.png|');
+  .num {
+    color: #ffd580;
+    font-size: 35px;
+    text-align: center;
+    margin: auto;
+    line-height: 60px;
+  }
+  .loading-box {
+    width: 100%;
+    height: 345px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    .loading {
+      display: block;
+      margin: 0 auto;
+      animation-duration: 4s;
+    }
+    p {
+      font-size: 30px;
+      line-height: 120px;
+      text-align: center;
+      color: #ffd580;
+      margin-top: 30px;
+    }
+  }
+}
+</style>

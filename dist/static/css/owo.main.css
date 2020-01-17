@@ -1,0 +1,197 @@
+body, html, .owo, .page-box {
+  padding: 0;
+  margin: 0;
+}
+
+.owo-animation {
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.owo-animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.owo-animation-forward {
+  z-index: 99;
+}
+
+img {
+  border: none;
+}
+
+/* 清除浮动 */
+.clear:after {
+  content: "";
+  height: 0;
+  line-height: 0;
+  display: block;
+  visibility: hidden;
+  clear: both;
+  zoom: 1;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+.owo-animation-turn {
+  -webkit-animation: turn 12s linear infinite;
+  animation: turn 12s linear infinite;
+}
+
+@-webkit-keyframes turn {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  25% {
+    -webkit-transform: rotate(90deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(180deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(270deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes turn {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  25% {
+    -webkit-transform: rotate(90deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(180deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(270deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.loading-page {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -10%;
+  bottom: 0;
+  margin: auto;
+  background-color: #e32a2a;
+  background-image: url('../resource/loading-bg.png');
+}
+
+.loading-page .num {
+  color: #ffd580;
+  font-size: 35px;
+  text-align: center;
+  margin: auto;
+  line-height: 60px;
+}
+
+.loading-page .loading-box {
+  width: 100%;
+  height: 345px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.loading-page .loading-box .loading {
+  display: block;
+  margin: 0 auto;
+  -webkit-animation-duration: 4s;
+          animation-duration: 4s;
+}
+
+.loading-page .loading-box p {
+  font-size: 30px;
+  line-height: 120px;
+  text-align: center;
+  color: #ffd580;
+  margin-top: 30px;
+}
+.page-1 .start {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: darkviolet;
+  color: white;
+  font-size: 40px;
+  line-height: 50px;
+  text-align: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.page-1 .difficulty-box {
+  position: absolute;
+  top: 20%;
+  font-size: 42px;
+}
+
+.page-1 .difficulty-box .lable {
+  line-height: 60px;
+}
+
+.page-1 .difficulty-box input {
+  font-size: 40px;
+}
+
+.page-1 .mouse {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 40%;
+  background-color: burlywood;
+}
+
+.page-1 .mouse.active {
+  background-color: yellow;
+}
+
+.page-1 .text {
+  position: absolute;
+  bottom: 40%;
+  font-size: 40px;
+}
+.game #fireworks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  display: none;
+}
+
