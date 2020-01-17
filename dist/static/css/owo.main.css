@@ -173,6 +173,10 @@ li {
   width: 100px;
   height: 100px;
   top: 40%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   background-color: burlywood;
 }
 
