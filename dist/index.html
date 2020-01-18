@@ -104,8 +104,13 @@ owo.script = {
   "page1": {
     "data": {
       "list": ["解决办法", "问题原因", "加载更多", "解决办法", "问题原因", "加载更多", "加载更多", "解决办法", "加载更多", "解决办法", "问题原因", "问题原因", "加载更多", "解决办法", "问题原因"],
+      "checkMusic": null,
       "clock": null,
       "listInd": 0
+    },
+    "created": function created() {
+      this.data.checkMusic = new Audio("./static/resource/科技中信息传递.mp3");
+      this.data.checkMusic.loop = true;
     },
     "startGame": function startGame() {
       owo.go('game');
@@ -115,6 +120,7 @@ owo.script = {
 
       this.$target.classList.add('active');
       var dom = owo.query('.text')[0];
+      this.data.checkMusic.play();
       this.data.clock = setInterval(function () {
         if (_this2.data.listInd == _this2.data.list.length - 1) {
           _this2.data.listInd = 0;
@@ -124,6 +130,7 @@ owo.script = {
       }, 100);
     },
     "end": function end() {
+      this.data.checkMusic.pause();
       clearInterval(this.data.clock);
       this.$target.classList.remove('active');
     }
@@ -488,10 +495,13 @@ owo.script = {
 
         if (activeClipart.lock === true) {
           _this7.fit(activeClipart);
-        } // 替换成正常拼块
-        else {
-            _this7.data.puzzle.addChildAt(activeClipart.sprite, index);
-          } // 清空对象
+        } else {
+          // 不合适的位置
+          // 替换成正常拼块
+          new Audio("./static/resource/空鞭抽出.mp3").play();
+
+          _this7.data.puzzle.addChildAt(activeClipart.sprite, index);
+        } // 清空对象
 
 
         delete activeCliparts[identifier];
@@ -716,7 +726,9 @@ owo.script = {
       } // 当前拼块安装到对应的容器
 
 
-      parent.addChild(clipart.sprite); // 容器的动画
+      parent.addChild(clipart.sprite); // 播放正确音效
+
+      new Audio("./static/resource/鼠标在木桌放下.mp3").play(); // 容器的动画
 
       parent.tween && parent.tween.kill();
       parent.tween = TweenMax.fromTo(parent, .6, {
@@ -729,7 +741,7 @@ owo.script = {
 
       if (this.data.puzzle.children.length === 0) {
         this.$dom.fireworks.style.display = 'block';
-        console.log(this.$dom);
+        new Audio("./static/resource/烟花咚啾音效.mp3").play();
         setTimeout(function () {
           new Fireworks({
             canvas: document.getElementById('fireworks'),

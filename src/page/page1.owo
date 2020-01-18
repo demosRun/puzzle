@@ -28,11 +28,13 @@
         '解决办法',
         '问题原因',
       ],
+      checkMusic: null,
       clock: null,
       listInd: 0
     },
     created: function () {
-
+      this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
+      this.data.checkMusic.loop = true
     },
     startGame: function () {
       owo.go('game')
@@ -40,6 +42,7 @@
     start: function () {
       this.$target.classList.add('active')
       const dom = owo.query('.text')[0]
+      this.data.checkMusic.play()
       this.data.clock = setInterval(() => {
         if (this.data.listInd == this.data.list.length - 1) {
           this.data.listInd = 0
@@ -48,6 +51,7 @@
       }, 100)
     },
     end: function () {
+      this.data.checkMusic.pause()
       clearInterval(this.data.clock)
       this.$target.classList.remove('active')
     }

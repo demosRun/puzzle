@@ -359,11 +359,12 @@
         // 移除选中拼块
         this.data.puzzle.removeChild(activeClipart.selected)
         // 将拼块安装到对应位置上
-        if(activeClipart.lock === true) {
+        if (activeClipart.lock === true) {
           this.fit(activeClipart)
-        }
-        // 替换成正常拼块
-        else {
+        } else {
+          // 不合适的位置
+          // 替换成正常拼块
+          new Audio("@|空鞭抽出.mp3|").play()
           this.data.puzzle.addChildAt(activeClipart.sprite, index)
         } 
 
@@ -568,7 +569,8 @@
 
       // 当前拼块安装到对应的容器
       parent.addChild(clipart.sprite)
-
+      // 播放正确音效
+      new Audio("@|鼠标在木桌放下.mp3|").play()
       // 容器的动画
       parent.tween && parent.tween.kill()
       parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, ease: Linear.easeNone})
@@ -577,7 +579,7 @@
       // console.log(this.data.puzzle.children)
       if(this.data.puzzle.children.length === 0) {
         this.$dom.fireworks.style.display = 'block'
-        console.log(this.$dom)
+        new Audio("@|烟花咚啾音效.mp3|").play()
         setTimeout(() => {
           new Fireworks({
             canvas: document.getElementById('fireworks'),
