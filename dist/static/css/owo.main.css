@@ -127,8 +127,8 @@ li {
 .loading-page .loading-box .loading {
   display: block;
   margin: 0 auto;
-  -webkit-animation-duration: 4s;
-          animation-duration: 4s;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
 }
 
 .loading-page .loading-box p {
@@ -137,58 +137,308 @@ li {
   text-align: center;
   color: #ffd580;
   margin-top: 30px;
+}.owo-animation-shrink {
+  -webkit-animation: shrink 1s linear alternate infinite;
+  animation: shrink 1s linear alternate infinite;
 }
-.page-1 .start {
+@-webkit-keyframes shrink{
+  0%{-webkit-transform:scale(0.9);}
+  100%{-webkit-transform:scale(1);}
+}
+@keyframes shrink{
+  0%{-webkit-transform:scale(0.9);transform:scale(0.9);}
+  100%{-webkit-transform:scale(1);transform:scale(1);}
+}
+
+.start-page .so-3 {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: darkviolet;
-  color: white;
-  font-size: 40px;
-  line-height: 50px;
-  text-align: center;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
+  left: 0px;
+  z-index: 3;
+  top: 0px;
 }
 
-.page-1 .difficulty-box {
+.start-page .so-1 {
   position: absolute;
-  top: 20%;
-  font-size: 42px;
+  left: -57px;
+  z-index: 1;
+  top: 179px;
 }
 
-.page-1 .difficulty-box .lable {
-  line-height: 60px;
+.start-page .so-2-2 {
+  position: absolute;
+  left: 123px;
+  z-index: 2;
+  top: 9px;
 }
 
-.page-1 .difficulty-box input {
-  font-size: 40px;
+.start-page .so-2-3 {
+  position: absolute;
+  left: 0px;
+  z-index: 3;
+  top: 81px;
+}
+
+.start-page .so-2-1 {
+  position: absolute;
+  left: 458px;
+  z-index: 1;
+  top: 0px;
+}
+
+.start-page .so-2-5 {
+  position: absolute;
+  left: 130px;
+  z-index: 5;
+  top: 338px;
+}
+
+.start-page .so-2-4 {
+  position: absolute;
+  left: 614px;
+  z-index: 4;
+  top: 316px;
+}
+
+.start-page .so-2-6 {
+  position: absolute;
+  left: 500px;
+  z-index: 6;
+  top: 262px;
+}
+
+.start-page .so-2-7 {
+  position: absolute;
+  left: 340px;
+  z-index: 7;
+  top: 262px;
+}
+
+.start-page .so-4 {
+  position: absolute;
+  left: 223px;
+  z-index: 4;
+  top: 1108px;
+}
+
+.start-page .mouse {
+  position: absolute;
+  left: -50px;
+  top: 866px;
+  width: 849px;
+  height: 902px;
+  z-index: 2;
+  -webkit-transition: top 0.6s ease;
+  transition: top 0.6s ease;
+}.owo-animation-rotate {
+  -webkit-animation: rotate 6s linear alternate infinite;
+  animation: rotate 6s linear alternate infinite;
+  -webkit-transform-origin: center top;
+  transform-origin: center top;
+}
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(-20deg);
+            transform: rotate(-20deg);
+  }
+  100% {
+    -webkit-transform: rotate(20deg);
+            transform: rotate(20deg);
+  }
+}
+@keyframes rotate {
+  0% {
+    -webkit-transform: rotate(-20deg);
+            transform: rotate(-20deg);
+  }
+  100% {
+    -webkit-transform: rotate(20deg);
+            transform: rotate(20deg);
+  }
+}
+
+.page-1 {
+  background-image: url('../resource/bg-1.jpg');
 }
 
 .page-1 .mouse {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: 40%;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-  background-color: burlywood;
 }
 
 .page-1 .mouse.active {
-  background-color: yellow;
+  -webkit-transform: scale(0.9);
+          transform: scale(0.9);
 }
 
 .page-1 .text {
   position: absolute;
-  bottom: 40%;
-  font-size: 40px;
+  bottom: 0;
+  top: 9%;
+  font-size: 86px;
+  width: 100px;
+  line-height: 100px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  height: 400px;
+  -webkit-box-align: center;
+          align-items: center;
+  color: #ffdc99;
+  font-weight: bold;
 }
+
+.page-1 .so-7 {
+  position: absolute;
+  left: -82px;
+  z-index: 7;
+  top: -115px;
+  opacity: 0.50196078;
+}
+
+.page-1 .so-8 {
+  position: absolute;
+  left: 23px;
+  z-index: 8;
+  top: -33px;
+  opacity: 0.50196078;
+}
+
+.page-1 .so-6 {
+  position: absolute;
+  left: 545px;
+  z-index: 6;
+  top: -33px;
+  opacity: 0.50196078;
+}
+
+.page-1 .so-4 {
+  position: absolute;
+  left: 650px;
+  z-index: 4;
+  top: -115px;
+  opacity: 0.50196078;
+}
+
+.page-1 .so-3 {
+  position: absolute;
+  left: 214px;
+  z-index: 3;
+  top: 213px;
+}
+
+.page-1 .so-15 {
+  position: absolute;
+  left: 211px;
+  z-index: 15;
+  top: 1103px;
+}
+
+.page-1 .so-2 {
+  position: absolute;
+  left: -144px;
+  z-index: 2;
+  top: -166px;
+}
+
+.page-1 .lable {
+  display: none;
+}
+
+.page-1 .so-14 {
+  position: absolute;
+  left: 287px;
+  z-index: 14;
+  top: 427px;
+}
+
+.page-1 .so-13 {
+  position: absolute;
+  left: 289px;
+  z-index: 13;
+  top: 417px;
+}
+
+.page-1 .so-12 {
+  position: absolute;
+  left: 292px;
+  z-index: 12;
+  top: 412px;
+}
+
+.page-1 .so-11 {
+  position: absolute;
+  left: 290px;
+  z-index: 11;
+  top: 425px;
+}
+
+.page-1 .so-10 {
+  position: absolute;
+  left: 291px;
+  z-index: 10;
+  top: 428px;
+}
+
+.page-1 .so-9 {
+  position: absolute;
+  left: 287px;
+  z-index: 9;
+  top: 407px;
+}
+
+.page-1 .prop-2 {
+  position: absolute;
+  left: 90px;
+  z-index: 2;
+  top: 370px;
+}
+
+.page-1 .prop-4 {
+  position: absolute;
+  left: 145px;
+  z-index: 4;
+  top: 889px;
+}
+
+.page-1 .prop-3 {
+  position: absolute;
+  left: 428px;
+  z-index: 3;
+  top: 889px;
+}
+
+.page-1 .blinker {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(219, 46, 33, 0.6);
+  z-index: 99;
+  top: -100%;
+  -webkit-transition: top 1s ease;
+  transition: top 1s ease;
+}
+
+.page-1 .show {
+  top: 0%;
+}
+
+.page-1 .play-text {
+  position: absolute;
+  top: 730px;
+  left: 258px;
+  z-index: 9;
+  color: #fe5838;
+  font-size: 34px;
+  font-weight: bold;
+}
+.game {
+  background-color: white;
+  background-image: url('../resource/loading-bg.png');
+}
+
 .game #fireworks {
   position: absolute;
   width: 100%;
@@ -197,5 +447,99 @@ li {
   left: 0;
   top: 0;
   display: none;
+}
+/* 页面切换动画 */
+.o-page-flipOutRight {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation: flipOutRight .5s both ease-in;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation: flipOutRight .5s both ease-in;
+	transform-origin: 50% 50%;
+	animation: flipOutRight .5s both ease-in;
+}
+
+@-webkit-keyframes flipOutRight {
+	to { -webkit-transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+@-moz-keyframes flipOutRight {
+	to { -moz-transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+@keyframes flipOutRight {
+	to { transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+.o-page-flipInLeft {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation: flipInLeft .5s both ease-out;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation: flipInLeft .5s both ease-out;
+	transform-origin: 50% 50%;
+	animation: flipInLeft .5s both ease-out;
+}
+
+@-webkit-keyframes flipInLeft {
+	from { -webkit-transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+@-moz-keyframes flipInLeft {
+	from { -moz-transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+@keyframes flipInLeft {
+	from { transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+.o-page-delay500 {
+	-webkit-animation-delay: .5s !important;
+	-moz-animation-delay: .5s !important;
+	animation-delay: .5s !important;
+}
+.o-page-flipOutLeft {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation: flipOutLeft .5s both ease-in;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation: flipOutLeft .5s both ease-in;
+	transform-origin: 50% 50%;
+	animation: flipOutLeft .5s both ease-in;
+}
+
+@-webkit-keyframes flipOutLeft {
+	to { -webkit-transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+@-moz-keyframes flipOutLeft {
+	to { -moz-transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+@keyframes flipOutLeft {
+	to { transform: translateZ(-1000px) rotateY(-90deg); opacity: 0.2; }
+}
+.o-page-flipInRight {
+	-webkit-transform-origin: 50% 50%;
+	-webkit-animation: flipInRight .5s both ease-out;
+	-moz-transform-origin: 50% 50%;
+	-moz-animation: flipInRight .5s both ease-out;
+	transform-origin: 50% 50%;
+	animation: flipInRight .5s both ease-out;
+}
+
+@-webkit-keyframes flipInRight {
+	from { -webkit-transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+@-moz-keyframes flipInRight {
+	from { -moz-transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+@keyframes flipInRight {
+	from { transform: translateZ(-1000px) rotateY(90deg); opacity: 0.2; }
+}
+
+/* 动画效果 */
+@keyframes zoomIn2 {
+  from {
+    opacity: 0;
+    transform: scale3d(1.8, 1.8, 1.8);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.zoomIn2 {
+  animation-name: zoomIn2;
 }
 

@@ -127,6 +127,11 @@
 			"type": "page"
 		},
 		{
+			"name": "start",
+			"src": "./src/page/start.owo",
+			"type": "page"
+		},
+		{
 			"name": "page1",
 			"src": "./src/page/page1.owo",
 			"type": "page"

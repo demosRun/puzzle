@@ -1,0 +1,107 @@
+<template lang="pug">
+.start-page
+  img.so-3(src="@|start-3.png|")
+  img.so-1(src="@|start-1.png|")
+  // 开始按钮
+  img.so-4.start(src="@|start-4.png|" o-animation="shrink" o-tap="start")
+  .mouse
+    img.so-2-2(src="@|start-2-2.png|")
+    img.so-2-3(src="@|start-2-3.png|")
+    img.so-2-1(src="@|start-2-1.png|")
+    img.so-2-5(src="@|start-2-5.png|")
+    img.so-2-4(src="@|start-2-4.png|")
+    img.so-2-6(src="@|start-2-6.png|")
+    img.so-2-7(src="@|start-2-7.png|")
+</template>
+
+<script>
+  module.exports = {
+    data: {
+    },
+    created: function () {
+      console.log('sdsd')
+      setTimeout(() => {
+        owo.query('.mouse')[0].style.top = '408px'
+      }, 500);
+    },
+    start: function () {
+      owo.query('.mouse')[0].style.top = ''
+      setTimeout(() => {
+        owo.go('page1', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)
+      }, 800)
+    }
+  }
+</script>
+
+
+<style lang="less">
+.so-3 {
+  position: absolute;
+  left: 0px;
+  z-index: 3;
+  top: 0px
+}
+.so-1 {
+  position: absolute;
+  left: -57px;
+  z-index: 1;
+  top: 179px
+}
+.so-2-2 {
+  position: absolute;
+  left: 123px;
+  z-index: 2;
+  top: 9px
+}
+.so-2-3 {
+  position: absolute;
+  left: 0px;
+  z-index: 3;
+  top: 81px
+}
+.so-2-1 {
+  position: absolute;
+  left: 458px;
+  z-index: 1;
+  top: 0px
+}
+.so-2-5 {
+  position: absolute;
+  left: 130px;
+  z-index: 5;
+  top: 338px
+}
+.so-2-4 {
+  position: absolute;
+  left: 614px;
+  z-index: 4;
+  top: 316px
+}
+.so-2-6 {
+  position: absolute;
+  left: 500px;
+  z-index: 6;
+  top: 262px
+}
+.so-2-7 {
+  position: absolute;
+  left: 340px;
+  z-index: 7;
+  top: 262px
+}
+.so-4 {
+  position: absolute;
+  left: 223px;
+  z-index: 4;
+  top: 1108px
+}
+.mouse {
+  position: absolute;
+  left: -50px;
+  top: 866px;
+  width: 849px;
+  height: 902px;
+  z-index: 2;
+  transition: top 0.6s ease;
+}
+</style>

@@ -82,18 +82,10 @@
 
       let loader = new PIXI.loaders.Loader()
       // 加载必须图片
-      loader.add([{name: 'shade', url: '@|shade.jpg|'}, {name: 'clipart', url: '@|clipart.png|'}]).load(() => {
-        let shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade'])
-        // 设置背景
-        shade.set({
-          alpha: 1, 
-          width: this.data.width, 
-          height: this.data.height
-        })
-        this.data.app.stage.addChildAt(shade, 0)
+      loader.add([{name: 'clipart', url: '@|clipart.png|'}]).load(() => {
         this.loaded = true
+        this.start()
       })
-      this.start()
     },
     start: function () {
       // 销毁上次的拼块
@@ -609,6 +601,10 @@
 
 
 <style lang="less">
+.game {
+  background-color: white;
+  background-image: url('@|loading-bg.png|');
+}
 #fireworks {
   position: absolute;
   width: 100%;

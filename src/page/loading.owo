@@ -17,7 +17,7 @@
       const mum = owo.query('.num')[0]
       this.preloadImages(this.data.imgList, (e) => {
         setTimeout(() => {
-          owo.go('page1', '', '', '', '', true)
+          owo.go('start', '', '', '', '', true)
         }, 800)
       }, (num) => {
         mum.innerHTML = num + '%'
@@ -83,7 +83,7 @@
     .loading {
       display: block;
       margin: 0 auto;
-      animation-duration: 4s;
+      animation-duration: 3s;
     }
     p {
       font-size: 30px;

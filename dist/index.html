@@ -32,8 +32,10 @@
     <div class="scale-box"><!-- 页面区域 -->
     <!-- 页面[loading]-->
     <div class="loading-page owo" template="loading" style="display: none;"><div class="loading-box"><img class="loading owo-animation-turn" src="./static/resource/loading.png" o-animation="turn"><p>听说爱「拼」的人更能实现愿望哦！</p><div class="num">100%</div></div></div>
+    <!-- 页面[start]-->
+    <div class="start-page owo" template="start" style="display: none;"><img class="so-3" src="./static/resource/start-3.png"><img class="so-1" src="./static/resource/start-1.png"><!-- 开始按钮--><img class="so-4 start owo-animation-shrink" src="./static/resource/start-4.png" o-animation="shrink" o-tap="start"><div class="mouse"><img class="so-2-2" src="./static/resource/start-2-2.png"><img class="so-2-3" src="./static/resource/start-2-3.png"><img class="so-2-1" src="./static/resource/start-2-1.png"><img class="so-2-5" src="./static/resource/start-2-5.png"><img class="so-2-4" src="./static/resource/start-2-4.png"><img class="so-2-6" src="./static/resource/start-2-6.png"><img class="so-2-7" src="./static/resource/start-2-7.png"></div></div>
     <!-- 页面[page1]-->
-    <div class="page-1 owo" template="page1" style="display: none;"><div class="difficulty-box"><div class="lable">难度</div><input type="number" o-value="owo.script.game.data.difficulty"></div><div class="start" o-tap="startGame">开始游戏</div><div class="mouse" o-touchstart="start" o-touchend="end" o-touchcancel="end">按住我</div><div class="text">撒大苏打</div></div>
+    <div class="page-1 owo" template="page1" style="display: none;"><img class="so-2" src="./static/resource/draw-2.png"><img class="so-7" src="./static/resource/draw-7.png"><img class="so-8 owo-animation-rotate" src="./static/resource/draw-8.png" o-animation="rotate"><img class="so-6 owo-animation-rotate" src="./static/resource/draw-6.png" o-animation="rotate"><img class="so-4" src="./static/resource/draw-4.png"><img class="so-3" src="./static/resource/draw-3.png"><!-- 小图标--><img class="so-14 lable" src="./static/resource/draw-14.png"><img class="so-13 lable" src="./static/resource/draw-13.png"><img class="so-12 lable" src="./static/resource/draw-12.png"><img class="so-11 lable" src="./static/resource/draw-11.png"><img class="so-10 lable" src="./static/resource/draw-10.png"><img class="so-9 lable" src="./static/resource/draw-9.png"><!-- 选定后的弹窗--><div class="blinker"><img class="prop-2" src="./static/resource/prop-2.png"><img class="prop-4" src="./static/resource/prop-4.png" o-tap="replay"><img class="prop-3" src="./static/resource/prop-3.png" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', true)"><div class="play-text">「鸿运当头」</div></div><div class="mouse so-15" style="width: 328px; height: 328px; background-image: url(./static/resource/draw-15.png)" o-touchstart="start" o-touchend="end" o-touchcancel="end"></div><div class="start" o-tap="startGame">开始游戏</div><div class="text">开启惊喜</div></div>
     <!-- 页面[game]-->
     <div class="game owo" template="game" style="display: none;"><canvas class="puzzle_game" id="puzzleGame"></canvas><canvas id="fireworks"></canvas></div></div>
     
@@ -62,7 +64,7 @@ owo.script = {
       var mum = owo.query('.num')[0];
       this.preloadImages(this.data.imgList, function (e) {
         setTimeout(function () {
-          owo.go('page1', '', '', '', '', true);
+          owo.go('start', '', '', '', '', true);
         }, 800);
       }, function (num) {
         mum.innerHTML = num + '%';
@@ -101,9 +103,41 @@ owo.script = {
       }
     }
   },
+  "start": {
+    "created": function created() {
+      console.log('sdsd');
+      setTimeout(function () {
+        owo.query('.mouse')[0].style.top = '408px';
+      }, 500);
+    },
+    "start": function start() {
+      owo.query('.mouse')[0].style.top = '';
+      setTimeout(function () {
+        owo.go('page1', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true);
+      }, 800);
+    }
+  },
   "page1": {
     "data": {
-      "list": ["解决办法", "问题原因", "加载更多", "解决办法", "问题原因", "加载更多", "加载更多", "解决办法", "加载更多", "解决办法", "问题原因", "问题原因", "加载更多", "解决办法", "问题原因"],
+      "list": [{
+        "text": "财源广进",
+        "id": "14"
+      }, {
+        "text": "人见人爱",
+        "id": "13"
+      }, {
+        "text": "心想事成",
+        "id": "12"
+      }, {
+        "text": "万事如意",
+        "id": "11"
+      }, {
+        "text": "金榜题名",
+        "id": "10"
+      }, {
+        "text": "鸿运当头",
+        "id": "9"
+      }],
       "checkMusic": null,
       "clock": null,
       "listInd": 0
@@ -120,19 +154,34 @@ owo.script = {
 
       this.$target.classList.add('active');
       var dom = owo.query('.text')[0];
-      this.data.checkMusic.play();
+      if (this.data.checkMusic) this.data.checkMusic.play();
       this.data.clock = setInterval(function () {
         if (_this2.data.listInd == _this2.data.list.length - 1) {
           _this2.data.listInd = 0;
         }
 
-        dom.innerText = _this2.data.list[_this2.data.listInd++];
+        dom.innerText = _this2.data.list[++_this2.data.listInd].text;
       }, 100);
     },
     "end": function end() {
-      this.data.checkMusic.pause();
+      if (this.data.checkMusic) this.data.checkMusic.pause();
       clearInterval(this.data.clock);
-      this.$target.classList.remove('active');
+      this.$target.style.display = 'none';
+      this.$target.classList.remove('active'); // 活跃id
+
+      var id = this.data.list[this.data.listInd].id;
+      console.log("\u6D3B\u8DC3ID: " + id);
+      owo.query(".so-" + id)[0].style.display = 'block';
+      owo.tool.animate('zoomIn2', owo.query(".so-" + id)[0]); // 抽出卡片
+
+      owo.query('.blinker .play-text')[0].innerText = "\u300C" + this.data.list[this.data.listInd].text + "\u300D";
+      setTimeout(function () {
+        owo.query('.blinker')[0].classList.add('show');
+      }, 2000);
+    },
+    "replay": function replay() {
+      owo.query('.blinker')[0].classList.remove('show');
+      owo.query('.so-15')[0].style.display = 'block';
     }
   },
   "game": {
@@ -209,25 +258,13 @@ owo.script = {
       var loader = new PIXI.loaders.Loader(); // 加载必须图片
 
       loader.add([{
-        name: 'shade',
-        url: './static/resource/shade.jpg'
-      }, {
         name: 'clipart',
         url: './static/resource/clipart.png'
       }]).load(function () {
-        var shade = new PIXI.Sprite(PIXI.utils.TextureCache['shade']); // 设置背景
-
-        shade.set({
-          alpha: 1,
-          width: _this4.data.width,
-          height: _this4.data.height
-        });
-
-        _this4.data.app.stage.addChildAt(shade, 0);
-
         _this4.loaded = true;
+
+        _this4.start();
       });
-      this.start();
     },
     "start": function start() {
       var _this5 = this;

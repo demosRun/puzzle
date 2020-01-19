@@ -1,0 +1,18 @@
+<template lang="pug">
+.pass-page
+</template>
+
+<script>
+  module.exports = {
+    data: {
+    },
+    show: function () {
+      
+    }
+  }
+</script>
+
+
+<style lang="less">
+
+</style>

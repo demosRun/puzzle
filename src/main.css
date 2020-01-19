@@ -9,6 +9,7 @@ body, html {
   font: normal 12px/180% "SimSun";
   -webkit-overflow-scrolling: touch;
   position: relative;
+  /* background-color: #bb2505; */
 }
 .owo {
   width: 100%;
