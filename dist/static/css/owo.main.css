@@ -256,10 +256,6 @@ li {
   }
 }
 
-.page-1 {
-  background-image: url('../resource/bg-1.jpg');
-}
-
 .page-1 .mouse {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -434,9 +430,87 @@ li {
   font-size: 34px;
   font-weight: bold;
 }
+
+.page-1 .envelope {
+  position: absolute;
+  z-index: 9;
+  top: -200px;
+}
+
+.page-1 .rat {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  -webkit-transition: top 1s ease;
+  transition: top 1s ease;
+  background-image: url('../resource/bg-1.jpg');
+}
+
+.page-1 .rat.active {
+  top: 200px;
+}
+.pass-page {
+  background-color: #e32a2a;
+  background-image: url('../resource/loading-bg.png');
+}
+
+.pass-page .so-3 {
+  position: absolute;
+  left: 124px;
+  z-index: 3;
+  top: 289px;
+}
+
+.pass-page .so-2 {
+  position: absolute;
+  left: 82px;
+  z-index: 2;
+  top: 229px;
+}
+
+.pass-page .so-5 {
+  position: absolute;
+  left: 121px;
+  z-index: 5;
+  top: 1246px;
+}
+
+.pass-page .so-4 {
+  position: absolute;
+  left: 479px;
+  z-index: 4;
+  top: 1246px;
+}
+.pass-page .so-3 {
+  position: absolute;
+  left: 124px;
+  z-index: 3;
+  top: 289px;
+}
+
+.pass-page .so-2 {
+  position: absolute;
+  left: 82px;
+  z-index: 2;
+  top: 229px;
+}
+
+.pass-page .so-5 {
+  position: absolute;
+  left: 121px;
+  z-index: 5;
+  top: 1246px;
+}
+
+.pass-page .so-4 {
+  position: absolute;
+  left: 479px;
+  z-index: 4;
+  top: 1246px;
+}
 .game {
   background-color: white;
-  background-image: url('../resource/loading-bg.png');
 }
 
 .game #fireworks {

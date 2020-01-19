@@ -18,10 +18,6 @@
 
 
 <style lang="less">
-.pass-page {
-  background-color: #e32a2a;
-  background-image: url('@|loading-bg.png|');
-}
 .so-3 {
   position: absolute;
   left: 124px;

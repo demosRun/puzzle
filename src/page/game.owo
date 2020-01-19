@@ -603,7 +603,7 @@
 <style lang="less">
 .game {
   background-color: white;
-  background-image: url('@|loading-bg.png|');
+  // background-image: url('@|loading-bg.png|');
 }
 #fireworks {
   position: absolute;

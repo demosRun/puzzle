@@ -137,6 +137,16 @@
 			"type": "page"
 		},
 		{
+			"name": "pass",
+			"src": "./src/page/pass.owo",
+			"type": "page"
+		},
+		{
+			"name": "share",
+			"src": "./src/page/share.owo",
+			"type": "page"
+		},
+		{
 			"name": "game",
 			"src": "./src/page/game.owo",
 			"type": "page"

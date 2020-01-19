@@ -1,27 +1,29 @@
 <template lang="pug">
 .page-1
-  img.so-2(src="@|draw-2.png|")
-  img.so-7(src="@|draw-7.png|")
-  img.so-8(src="@|draw-8.png|" o-animation="rotate")
-  img.so-6(src="@|draw-6.png|" o-animation="rotate")
-  img.so-4(src="@|draw-4.png|")
-  img.so-3(src="@|draw-3.png|")
-  // 小图标
-  img.so-14.lable(src="@|draw-14.png|")
-  img.so-13.lable(src="@|draw-13.png|")
-  img.so-12.lable(src="@|draw-12.png|")
-  img.so-11.lable(src="@|draw-11.png|")
-  img.so-10.lable(src="@|draw-10.png|")
-  img.so-9.lable(src="@|draw-9.png|")
+  .rat
+    img.so-2(src="@|draw-2.png|")
+    img.so-7(src="@|draw-7.png|")
+    img.so-8(src="@|draw-8.png|" o-animation="rotate")
+    img.so-6(src="@|draw-6.png|" o-animation="rotate")
+    img.so-4(src="@|draw-4.png|")
+    img.so-3(src="@|draw-3.png|")
+    // 小图标
+    img.so-14.lable(src="@|draw-14.png|")
+    img.so-13.lable(src="@|draw-13.png|")
+    img.so-12.lable(src="@|draw-12.png|")
+    img.so-11.lable(src="@|draw-11.png|")
+    img.so-10.lable(src="@|draw-10.png|")
+    img.so-9.lable(src="@|draw-9.png|")
+    .mouse.so-15(style="width: 328px; height: 328px; background-image: url(@|draw-15.png|)" o-touchstart="start" o-touchend="end" o-touchcancel="end")
+    .text 开启惊喜
+    // 信封
+    img.envelope(src="@|envelope.jpg|")
   // 选定后的弹窗
   .blinker
     img.prop-2(src="@|prop-2.png|")
     img.prop-4(src="@|prop-4.png|" o-tap="replay")
     img.prop-3(src="@|prop-3.png|" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)")
     .play-text 「鸿运当头」
-  .mouse.so-15(style="width: 328px; height: 328px; background-image: url(@|draw-15.png|)" o-touchstart="start" o-touchend="end" o-touchcancel="end")
-  .start(o-tap="startGame") 开始游戏
-  .text 开启惊喜
 </template>
 
 <script>
@@ -42,6 +44,9 @@
     created: function () {
       this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
       this.data.checkMusic.loop = true
+      if (window.translationScaleY) {
+        owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px'
+      }
     },
     startGame: function () {
       owo.go('game')
@@ -69,6 +74,10 @@
       owo.tool.animate('zoomIn2', owo.query(`.so-${id}`)[0])
       // 抽出卡片
       owo.query('.blinker .play-text')[0].innerText = `「${this.data.list[this.data.listInd].text}」`
+      // 信封往下
+      setTimeout(() => {
+        owo.query('.rat')[0].classList.add('active')
+      }, 800)
       setTimeout(() => {
         owo.query('.blinker')[0].classList.add('show')
       }, 2000)
@@ -76,15 +85,18 @@
     replay: function () {
       owo.query('.blinker')[0].classList.remove('show')
       owo.query('.so-15')[0].style.display = 'block'
+      setTimeout(() => {
+        owo.query('.rat')[0].classList.remove('active')
+      }, 1000)
+      owo.query('.lable').forEach(element => {
+        element.style.display = 'none'
+      })
     }
   }
 </script>
 
 
 <style lang="less">
-.page-1 {
-  background-image: url('@|bg-1.jpg|')
-}
 .mouse {
   user-select: none;
 }
@@ -230,5 +242,21 @@
   color: #fe5838;
   font-size: 34px;
   font-weight: bold;
+}
+.envelope {
+  position: absolute;
+  z-index: 9;
+  top: -200px;
+}
+.rat {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  transition: top 1s ease;
+  background-image: url('@|bg-1.jpg|')
+}
+.rat.active {
+  top: 200px;
 }
 </style>

@@ -35,7 +35,11 @@
     <!-- 页面[start]-->
     <div class="start-page owo" template="start" style="display: none;"><img class="so-3" src="./static/resource/start-3.png"><img class="so-1" src="./static/resource/start-1.png"><!-- 开始按钮--><img class="so-4 start owo-animation-shrink" src="./static/resource/start-4.png" o-animation="shrink" o-tap="start"><div class="mouse"><img class="so-2-2" src="./static/resource/start-2-2.png"><img class="so-2-3" src="./static/resource/start-2-3.png"><img class="so-2-1" src="./static/resource/start-2-1.png"><img class="so-2-5" src="./static/resource/start-2-5.png"><img class="so-2-4" src="./static/resource/start-2-4.png"><img class="so-2-6" src="./static/resource/start-2-6.png"><img class="so-2-7" src="./static/resource/start-2-7.png"></div></div>
     <!-- 页面[page1]-->
-    <div class="page-1 owo" template="page1" style="display: none;"><img class="so-2" src="./static/resource/draw-2.png"><img class="so-7" src="./static/resource/draw-7.png"><img class="so-8 owo-animation-rotate" src="./static/resource/draw-8.png" o-animation="rotate"><img class="so-6 owo-animation-rotate" src="./static/resource/draw-6.png" o-animation="rotate"><img class="so-4" src="./static/resource/draw-4.png"><img class="so-3" src="./static/resource/draw-3.png"><!-- 小图标--><img class="so-14 lable" src="./static/resource/draw-14.png"><img class="so-13 lable" src="./static/resource/draw-13.png"><img class="so-12 lable" src="./static/resource/draw-12.png"><img class="so-11 lable" src="./static/resource/draw-11.png"><img class="so-10 lable" src="./static/resource/draw-10.png"><img class="so-9 lable" src="./static/resource/draw-9.png"><!-- 选定后的弹窗--><div class="blinker"><img class="prop-2" src="./static/resource/prop-2.png"><img class="prop-4" src="./static/resource/prop-4.png" o-tap="replay"><img class="prop-3" src="./static/resource/prop-3.png" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', true)"><div class="play-text">「鸿运当头」</div></div><div class="mouse so-15" style="width: 328px; height: 328px; background-image: url(./static/resource/draw-15.png)" o-touchstart="start" o-touchend="end" o-touchcancel="end"></div><div class="start" o-tap="startGame">开始游戏</div><div class="text">开启惊喜</div></div>
+    <div class="page-1 owo" template="page1" style="display: none;"><div class="rat"><img class="so-2" src="./static/resource/draw-2.png"><img class="so-7" src="./static/resource/draw-7.png"><img class="so-8 owo-animation-rotate" src="./static/resource/draw-8.png" o-animation="rotate"><img class="so-6 owo-animation-rotate" src="./static/resource/draw-6.png" o-animation="rotate"><img class="so-4" src="./static/resource/draw-4.png"><img class="so-3" src="./static/resource/draw-3.png"><!-- 小图标--><img class="so-14 lable" src="./static/resource/draw-14.png"><img class="so-13 lable" src="./static/resource/draw-13.png"><img class="so-12 lable" src="./static/resource/draw-12.png"><img class="so-11 lable" src="./static/resource/draw-11.png"><img class="so-10 lable" src="./static/resource/draw-10.png"><img class="so-9 lable" src="./static/resource/draw-9.png"><div class="mouse so-15" style="width: 328px; height: 328px; background-image: url(./static/resource/draw-15.png)" o-touchstart="start" o-touchend="end" o-touchcancel="end"></div><div class="text">开启惊喜</div><!-- 信封--><img class="envelope" src="./static/resource/envelope.jpg"></div><!-- 选定后的弹窗--><div class="blinker"><img class="prop-2" src="./static/resource/prop-2.png"><img class="prop-4" src="./static/resource/prop-4.png" o-tap="replay"><img class="prop-3" src="./static/resource/prop-3.png" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', true)"><div class="play-text">「鸿运当头」</div></div></div>
+    <!-- 页面[pass]-->
+    <div class="pass-page owo" template="pass" style="display: none;"><img class="so-3" src="./static/resource/share-3.png"><img class="so-2" src="./static/resource/share-2.png"><img class="so-5" src="./static/resource/share-5.png"><img class="so-4" src="./static/resource/share-4.png"></div>
+    <!-- 页面[share]-->
+    <div class="pass-page owo" template="share" style="display: none;"><img class="so-3" src="./static/resource/share-3.png"><img class="so-2" src="./static/resource/share-2.png"><img class="so-5" src="./static/resource/share-5.png"><img class="so-4" src="./static/resource/share-4.png"></div>
     <!-- 页面[game]-->
     <div class="game owo" template="game" style="display: none;"><canvas class="puzzle_game" id="puzzleGame"></canvas><canvas id="fireworks"></canvas></div></div>
     
@@ -145,6 +149,10 @@ owo.script = {
     "created": function created() {
       this.data.checkMusic = new Audio("./static/resource/科技中信息传递.mp3");
       this.data.checkMusic.loop = true;
+
+      if (window.translationScaleY) {
+        owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px';
+      }
     },
     "startGame": function startGame() {
       owo.go('game');
@@ -174,7 +182,11 @@ owo.script = {
       owo.query(".so-" + id)[0].style.display = 'block';
       owo.tool.animate('zoomIn2', owo.query(".so-" + id)[0]); // 抽出卡片
 
-      owo.query('.blinker .play-text')[0].innerText = "\u300C" + this.data.list[this.data.listInd].text + "\u300D";
+      owo.query('.blinker .play-text')[0].innerText = "\u300C" + this.data.list[this.data.listInd].text + "\u300D"; // 信封往下
+
+      setTimeout(function () {
+        owo.query('.rat')[0].classList.add('active');
+      }, 800);
       setTimeout(function () {
         owo.query('.blinker')[0].classList.add('show');
       }, 2000);
@@ -182,7 +194,19 @@ owo.script = {
     "replay": function replay() {
       owo.query('.blinker')[0].classList.remove('show');
       owo.query('.so-15')[0].style.display = 'block';
+      setTimeout(function () {
+        owo.query('.rat')[0].classList.remove('active');
+      }, 1000);
+      owo.query('.lable').forEach(function (element) {
+        element.style.display = 'none';
+      });
     }
+  },
+  "pass": {
+    "show": function show() {}
+  },
+  "share": {
+    "show": function show() {}
   },
   "game": {
     "data": {
