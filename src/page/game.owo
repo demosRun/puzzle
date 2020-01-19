@@ -7,15 +7,15 @@
 <script>
   module.exports = {
     data: {
-      picture: '@|2.jpg|',
+      picture: '@|14.jpg|',
       // 难度
       difficulty: 1,
       // 窗口尺寸
       width: 750,
       height: 1508,
       // 拼图尺寸
-      imageWidth: 520,
-      imageHeight: 840,
+      imageWidth: 561,
+      imageHeight: 858,
       imageRatio: null,
       // PIXI实例
       app: null,
