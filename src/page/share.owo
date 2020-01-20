@@ -1,9 +1,10 @@
 <template lang="pug">
-.pass-page
-  img.so-3(src="@|share-3.png|")
-  img.so-2(src="@|share-2.png|")
-  img.so-5(src="@|share-5.png|")
-  img.so-4(src="@|share-4.png|")
+.share-page
+  img.so-5(src="@|show-5.png|")
+  img.so-4(src="@|show-4.png|"  o-tap="owo.go('page1', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)")
+  img.so-3(src="@|show-3.png|" o-tap="document.getElementsByClassName('share-box')[0].style.display = 'block'")
+  img.so-6(src="@|show-6.png|")
+  img.show-image
 </template>
 
 <script>
@@ -11,35 +12,50 @@
     data: {
     },
     show: function () {
-      
+      owo.query('.show-image')[0].src = owo.script.page1.data.list[owo.script.page1.data.listInd].showimg
     }
   }
 </script>
 
 
 <style lang="less">
-.so-3 {
-  position: absolute;
-  left: 124px;
-  z-index: 3;
-  top: 289px
-}
-.so-2 {
-  position: absolute;
-  left: 82px;
-  z-index: 2;
-  top: 229px
+.share-page {
+  background-color: #e32a2a;
+  background-image: url('@|loading-bg.png|');
 }
 .so-5 {
   position: absolute;
-  left: 121px;
+  left: 302px;
   z-index: 5;
-  top: 1246px
+  top: 1134px
 }
 .so-4 {
   position: absolute;
-  left: 479px;
+  left: 70px;
   z-index: 4;
-  top: 1246px
+  top: 1199px
+}
+.so-3 {
+  position: absolute;
+  left: 492px;
+  z-index: 3;
+  top: 1199px
+}
+.so-6 {
+  position: absolute;
+  left: 455px;
+  z-index: 6;
+  top: 1288px
+}
+.show-image {
+  position: absolute;
+  height: 63%;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 10%;
+  z-index: 99;
+  pointer-events: all;
+  user-select: auto;
 }
 </style>

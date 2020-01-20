@@ -2,6 +2,9 @@
 .game
   canvas#puzzleGame.puzzle_game
   canvas#fireworks
+  //- 剩余数量
+  .puzzle-info 剩余拼图：12块
+  img.find(o-tap="find" src="@|help.png|")
 </template>
 
 <script>
@@ -11,11 +14,11 @@
       // 难度
       difficulty: 1,
       // 窗口尺寸
-      width: 750,
+      width: 720,
       height: 1508,
       // 拼图尺寸
-      imageWidth: 561,
-      imageHeight: 858,
+      imageWidth: 510,
+      imageHeight: 826,
       imageRatio: null,
       // PIXI实例
       app: null,
@@ -30,8 +33,8 @@
       // 拼图总数
       total: 0
     },
-    created: function () {
-      
+    show: function () {
+      this.data.height = window.innerHeight / window.translationScale
       // 设置难度
       this.setDifficulty()
       // 图片与视窗的比例
@@ -179,7 +182,9 @@
             width: this.data.clipart.width, 
             height: this.data.clipart.height, 
             x: x, 
-            y: y
+            y: y,
+            startX: x,
+            startY: y
           }
           // 设置拼图属性
           let mask = new PIXI.Sprite(PIXI.utils.TextureCache['clipart'])
@@ -242,8 +247,50 @@
         } 
       }
     },
+    activeClipartItem: function (activeClipart, identifier) {
+      // 吸附效果 
+      if(Math.abs(activeClipart.x - activeClipart.selected.left) <= 15 && Math.abs(activeClipart.y - activeClipart.selected.top) <= 15) {
+        activeClipart.selected.rotate = 0
+        activeClipart.selected.left = activeClipart.x
+        activeClipart.selected.top = activeClipart.y
+        // 锁定
+        activeClipart.lock = true
+      }
+      // 初始坐标值变化
+      activeClipart.x0 = activeClipart.selected.left
+      activeClipart.y0 = activeClipart.selected.top
+
+      // 正常拼块与选中拼块属性同步
+      activeClipart.sprite.set(
+        {
+          top: activeClipart.selected.top, 
+          left: activeClipart.selected.left, 
+          rotate: activeClipart.selected.rotate
+        }
+      )
+
+      // 当前索引
+      let index = activeClipart.selected.parent.getChildIndex(activeClipart.selected)
+
+      // 移除选中拼块
+      this.data.puzzle.removeChild(activeClipart.selected)
+      // 将拼块安装到对应位置上
+      if (activeClipart.lock === true) {
+        this.fit(activeClipart)
+      } else {
+        // 不合适的位置
+        // 替换成正常拼块
+        new Audio("@|空鞭抽出.mp3|").play()
+        this.data.puzzle.addChildAt(activeClipart.sprite, index)
+      } 
+
+      // 清空对象
+      delete this.data.activeCliparts[identifier]
+      delete this.data.startPositions[identifier]
+    },
     // 打散拼块
     break: function () {
+      const _this = this
       // this.data.puzzle 的坐标
       let bounds = this.data.puzzle.getBounds()
       let [x, y] = [bounds.x, bounds.y]
@@ -255,14 +302,14 @@
           width: this.data.clipart.width * .8
         }, 
         // 标记禁区
-        rectangles: [ 
+        rectangles: [
           // 中心拼图底图区
-          {
-            x: (this.data.width - this.data.imageWidth) / 2, 
-            y: (this.data.height- this.data.imageHeight) / 2, 
-            width: this.data.imageWidth, 
-            height: this.data.imageHeight
-          }
+          // {
+          //   x: (this.data.width - this.data.imageWidth) / 2, 
+          //   y: (this.data.height- this.data.imageHeight) / 2, 
+          //   width: this.data.imageWidth, 
+          //   height: this.data.imageHeight
+          // }
         ]
       }
       // console.log('--------------')
@@ -284,10 +331,10 @@
       this.negative.visible = true
 
       // 手指下的拼块（multiple touch）
-      let activeCliparts = []
+      this.data.activeCliparts = []
 
       // 起始坐标（multiple touch）
-      let startPositions = []
+      this.data.startPositions = []
 
       // 舞台添加事件
       this.data.app.stage.interactive = true
@@ -296,8 +343,8 @@
         ({
           data, data: { global: endPosition, identifier }
         }) => {
-        const activeClipart = activeCliparts[identifier] || null
-        const startPosition = startPositions[identifier] || null
+        const activeClipart = this.data.activeCliparts[identifier] || null
+        const startPosition = this.data.startPositions[identifier] || null
         if(activeClipart !== null && startPosition !== null) { 
           if(--activeClipart.negativeCount >= 0) {
             activeClipart.rotate += activeClipart.negativeRotate
@@ -322,47 +369,11 @@
       let touchendHandle = ({
         data: { identifier }
       }) => {
-        const activeClipart = activeCliparts[identifier] || null
-        if(activeClipart === null) return 
-        // 吸附效果 
-        if(Math.abs(activeClipart.x - activeClipart.selected.left) <= 15 && Math.abs(activeClipart.y - activeClipart.selected.top) <= 15) {
-          activeClipart.selected.rotate = 0
-          activeClipart.selected.left = activeClipart.x
-          activeClipart.selected.top = activeClipart.y
-          // 锁定
-          activeClipart.lock = true
-        }
-        // 初始坐标值变化
-        activeClipart.x0 = activeClipart.selected.left
-        activeClipart.y0 = activeClipart.selected.top
-
-        // 正常拼块与选中拼块属性同步
-        activeClipart.sprite.set(
-          {
-            top: activeClipart.selected.top, 
-            left: activeClipart.selected.left, 
-            rotate: activeClipart.selected.rotate
-          }
-        )
-
-        // 当前索引
-        let index = activeClipart.selected.parent.getChildIndex(activeClipart.selected)
-
-        // 移除选中拼块
-        this.data.puzzle.removeChild(activeClipart.selected)
-        // 将拼块安装到对应位置上
-        if (activeClipart.lock === true) {
-          this.fit(activeClipart)
-        } else {
-          // 不合适的位置
-          // 替换成正常拼块
-          new Audio("@|空鞭抽出.mp3|").play()
-          this.data.puzzle.addChildAt(activeClipart.sprite, index)
-        } 
-
-        // 清空对象
-        delete activeCliparts[identifier]
-        delete startPositions[identifier]
+        const activeClipart = this.data.activeCliparts[identifier] || null
+        if(activeClipart === null) return
+        // console.log(activeClipart, identifier)
+        _this.activeClipartItem(activeClipart, identifier)
+        
       }
 
       this.data.app.stage.on(this.touchend, touchendHandle)
@@ -406,14 +417,13 @@
             clipart.y0 += selected.boxOffsetY
             selected.set({left: clipart.x0, top: clipart.y0})
           } 
-          activeCliparts[identifier] = clipart
-          startPositions[identifier] = {x: position.x, y: position.y}
+          this.data.activeCliparts[identifier] = clipart
+          this.data.startPositions[identifier] = {x: position.x, y: position.y}
         })
         clipart.rotate = (Math.random() - .5) * Math.PI / 4
 
         clipart.x0 = cells[index].x - x
         clipart.y0 = cells[index].y - y
-        
         // 边拖边回正角度参数
         clipart.negativeCount = 10
         clipart.negativeRotate = -clipart.rotate / clipart.negativeCount
@@ -468,6 +478,7 @@
     },
     // 安装拼块
     fit: function (clipart) {
+      
       // 当前拼块索引
       let index = clipart.index
       // 左边拼块
@@ -558,31 +569,40 @@
         )
         this.data.app.stage.addChildAt(parent, 2)
       }
-
+      clipart.sprite.interactive = false
       // 当前拼块安装到对应的容器
       parent.addChild(clipart.sprite)
       // 播放正确音效
       new Audio("@|鼠标在木桌放下.mp3|").play()
       // 容器的动画
       parent.tween && parent.tween.kill()
-      parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, ease: Linear.easeNone})
-
+      parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, index: 0, ease: Linear.easeNone})
+      this.endCall()
       // 判断游戏是否通关
       // console.log(this.data.puzzle.children)
-      if(this.data.puzzle.children.length === 0) {
+    },
+    endCall: function () {
+      let num = 0
+      console.log(this.data.cliparts)
+      this.data.cliparts.forEach(element => {
+        console.log(element.sprite.interactive)
+        if (element.sprite.interactive) num++
+      });
+      if(num === 0) {
         this.$dom.fireworks.style.display = 'block'
         new Audio("@|烟花咚啾音效.mp3|").play()
         setTimeout(() => {
           new Fireworks({
             canvas: document.getElementById('fireworks'),
             callback: () => {
-              alert('恭喜通关!')
-              this.$dom.fireworks.style.display = 'none'
+              setTimeout(() => {
+                owo.go('pass', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)
+              }, 500)
             }
           })
         }, 0);
-        
       }
+      owo.query('.puzzle-info')[0].innerHTML = `剩余拼图: ${num}块`
     },
     // 暂停
     pause: function () { 
@@ -596,6 +616,36 @@
       TweenMax.resumeAll()
       this.data.app.ticker.start()
     },
+    find: function () {
+      // 
+      console.log(this.data.puzzle)
+      const childrenItem = this.data.puzzle.children[0]
+
+      for (let index = 0; index < this.data.cliparts.length; index++) {
+        const element = this.data.cliparts[index];
+        if (element.sprite.interactive) {
+          element.sprite.interactive = false
+          TweenMax.fromTo(element.sprite, .3, {}, {left: element.startX, top: element.startY, rotate: 0, ease: Linear.easeNone})
+          break
+        }
+      }
+      this.endCall();
+      // this.data.app.stage.addChildAt(element.sprite, 0)
+      // this.data.cliparts.forEach(element => {
+      //   console.log(element.sprite.interactive)
+      //   // if (element.x0 == childrenItem.x && element.y0 == childrenItem.y) {
+      //   //   console.log(element)
+      //   //   element.sprite.x = element.x
+      //   //   element.sprite.y = element.y
+      //   //   element.sprite.rotate = 0
+      //   //   this.data.app.stage.addChildAt(element.sprite, 2)
+      //   // }
+      // });
+      // this.data.puzzle.removeChild(this.data.puzzle.children[0])
+      // this.data.puzzle.cremoveChild(this.data.puzzle.children[0])
+      // this.activeClipartItem(this.data.cliparts[0], 0)
+      // TweenMax.fromTo(this.data.puzzle.children[0], .6, {}, {x: 100, y: 100, ease: Linear.easeNone})
+    }
   }
 </script>
 
@@ -603,7 +653,7 @@
 <style lang="less">
 .game {
   background-color: white;
-  // background-image: url('@|loading-bg.png|');
+  background-image: url('@|shade.jpg|');
 }
 #fireworks {
   position: absolute;
@@ -613,5 +663,31 @@
   left: 0;
   top: 0;
   display: none;
+}
+.puzzle-info {
+  position: absolute;
+  bottom: 12%;
+  font-size: 30px;
+  color: #ee6039;
+  z-index: 99;
+  right: 2%;
+  user-select: none;
+  pointer-events: none;
+}
+.puzzle_game {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.find {
+  position: absolute;
+  bottom: 15%;
+  z-index: 99;
+  width: 210px;
+  height: auto;
+  right: 15px;
 }
 </style>

@@ -150,6 +150,11 @@
 			"name": "game",
 			"src": "./src/page/game.owo",
 			"type": "page"
+		},
+		{
+			"name": "helpShare",
+			"src": "./src/page/helpShare.owo",
+			"type": "block"
 		}
 	],
 	"mode": {

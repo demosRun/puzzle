@@ -24,22 +24,24 @@
     img.prop-4(src="@|prop-4.png|" o-tap="replay")
     img.prop-3(src="@|prop-3.png|" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)")
     .play-text 「鸿运当头」
+    .play-text-2 鸿运当头
 </template>
 
 <script>
   module.exports = {
     data: {
       list: [
-        {"text":"财源广进", "id":"14"},
-        {"text":"人见人爱", "id":"13"},
-        {"text":"心想事成", "id":"12"},
-        {"text":"万事如意", "id":"11"},
-        {"text":"金榜题名", "id":"10"},
-        {"text":"鸿运当头", "id":"9"}
+        {"text":"财源广进", "id":"14", "img":"@|14.jpg|", "showimg":"@|14-show.jpg|"},
+        {"text":"人见人爱", "id":"13", "img":"@|13.jpg|", "showimg":"@|13-show.jpg|"},
+        {"text":"心想事成", "id":"12", "img":"@|12.jpg|", "showimg":"@|12-show.jpg|"},
+        {"text":"万事如意", "id":"11", "img":"@|11.jpg|", "showimg":"@|11-show.jpg|"},
+        {"text":"金榜题名", "id":"10", "img":"@|10.jpg|", "showimg":"@|10-show.jpg|"},
+        {"text":"鸿运当头", "id":"9", "img":"@|9.jpg|", "showimg":"@|9-show.jpg|"}
       ],
       checkMusic: null,
       clock: null,
-      listInd: 0
+      listInd: 0,
+      activeID: 9
     },
     created: function () {
       this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
@@ -48,12 +50,10 @@
         owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px'
       }
     },
-    startGame: function () {
-      owo.go('game')
-    },
     start: function () {
       this.$target.classList.add('active')
       const dom = owo.query('.text')[0]
+      dom.innerText = this.data.list[0].text
       if (this.data.checkMusic) this.data.checkMusic.play()
       this.data.clock = setInterval(() => {
         if (this.data.listInd == this.data.list.length - 1) {
@@ -69,11 +69,14 @@
       this.$target.classList.remove('active')
       // 活跃id
       const id = this.data.list[this.data.listInd].id
+      this.data.activeID = id
+      owo.script.game.data.picture = `./static/resource/${id}.jpg`
       console.log(`活跃ID: ${id}`)
       owo.query(`.so-${id}`)[0].style.display = 'block'
       owo.tool.animate('zoomIn2', owo.query(`.so-${id}`)[0])
       // 抽出卡片
       owo.query('.blinker .play-text')[0].innerText = `「${this.data.list[this.data.listInd].text}」`
+      owo.query('.blinker .play-text-2')[0].innerText = `${this.data.list[this.data.listInd].text}`
       // 信封往下
       setTimeout(() => {
         owo.query('.rat')[0].classList.add('active')
@@ -226,7 +229,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(219, 46, 33, 0.6);
+  background-color: rgba(219, 46, 33, 1);
+  background-image: url('@|loading-bg.png|');
   z-index: 99;
   top: -100%;
   transition: top 1s ease;
@@ -258,5 +262,18 @@
 }
 .rat.active {
   top: 200px;
+}
+.play-text-2 {
+  position: absolute;
+  top: 608px;
+  font-size: 40px;
+  z-index: 9;
+  line-height: 50px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+  color: #fe5838;
 }
 </style>

@@ -4,6 +4,7 @@ class Gridistribution{
 	}
 	// 初始化
 	init({width, height, cell = {width: 10}, rectangles = []}) {
+		console.log('初始化')
     // console.log(width, height, cell)
 		// 格子的高默认与它的宽一样
 		cell.height === undefined && (cell.height = cell.width); 
@@ -38,7 +39,8 @@ class Gridistribution{
 		this.trim(rectangles); 
 	}
 	// 重置
-	reset(...args) { 
+	reset(...args) {
+		console.log('重置')
 		this.init(...args); 
 	}
 	_shuffle(a) {

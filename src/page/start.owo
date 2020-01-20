@@ -5,13 +5,13 @@
   // 开始按钮
   img.so-4.start(src="@|start-4.png|" o-animation="shrink" o-tap="start")
   .mouse
-    img.so-2-2(src="@|start-2-2.png|")
+    img.so-2-2(src="@|start-2-2.png|" o-animation="floatUpDownSmall")
     img.so-2-3(src="@|start-2-3.png|")
-    img.so-2-1(src="@|start-2-1.png|")
+    img.so-2-1(src="@|start-2-1.png|" o-animation="floatUpDownSmall")
     img.so-2-5(src="@|start-2-5.png|")
     img.so-2-4(src="@|start-2-4.png|")
-    img.so-2-6(src="@|start-2-6.png|")
-    img.so-2-7(src="@|start-2-7.png|")
+    img.so-2-6(src="@|start-2-6.png|" o-animation="shrink")
+    img.so-2-7(src="@|start-2-7.png|" o-animation="shrink")
 </template>
 
 <script>
@@ -27,8 +27,8 @@
     start: function () {
       owo.query('.mouse')[0].style.top = ''
       setTimeout(() => {
-        owo.go('page1', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)
-      }, 800)
+        owo.go('page1', 'scaleDown', 'moveFromRight', 'scaleDown', 'moveFromLeft', true)
+      }, 600)
     }
   }
 </script>
@@ -103,5 +103,9 @@
   height: 902px;
   z-index: 2;
   transition: top 0.6s ease;
+}
+.start-page {
+  overflow: hidden;
+  position: relative;
 }
 </style>

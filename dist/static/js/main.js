@@ -8,6 +8,7 @@ function getScale () {
   // 如果比例大于1则进入电脑模式
   if ((window.innerWidth / window.innerHeight) < 1) {
     var scale = window.innerWidth / deviseW
+    window.translationScale = scale
     scaleBox.style.width = deviseW + 'px'
     scaleBox.style.height = deviseH + 'px'
     scaleBox.style.transform = `scale(${scale}, ${scale})`
