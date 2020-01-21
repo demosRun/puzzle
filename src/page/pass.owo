@@ -2,7 +2,7 @@
 .pass-page
   img.so-3(src="@|share-3.png|")
   img.so-2(src="@|share-2.png|")
-  img.so-5(src="@|share-5.png|" o-tap="owo.go('page1', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)")
+  img.so-5(src="@|share-5.png|" o-tap="owo.go('page1', 'scaleDown', 'moveFromLeft', 'scaleDown', 'moveFromRight', true)")
   img.so-4(src="@|share-4.png|" o-tap="owo.go('share', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)")
   img.show
   .text#text

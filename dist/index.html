@@ -22,7 +22,7 @@
   <meta name="x5-page-mode" content="app" />
 
   <!-- 页面主样式文件 -->
-  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.main.8oqoya0rf3.css">
+  <link charset="utf-8" rel="stylesheet" href="./static/css/owo.main.b5mhzxp8gdj.css">
 
   <!-- 附属css文件 -->
   <link rel="stylesheet" href="./static/css/main.css" charset="utf-8">
@@ -78,7 +78,7 @@
       <div class="blinker">
         <img class="prop-2" src="./static/resource/prop-2.png">
         <img class="prop-4" src="./static/resource/prop-4.png" o-tap="replay">
-        <img class="prop-3" src="./static/resource/prop-3.png" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', true)">
+        <img class="prop-3" src="./static/resource/prop-3.png" o-tap="toPlay">
         <div class="play-text">「鸿运当头」</div>
         <div class="play-text-2">鸿运当头</div>
       </div>
@@ -87,18 +87,21 @@
     <div class="pass-page owo" template="pass" style="display: none;">
       <img class="so-3" src="./static/resource/share-3.png">
       <img class="so-2" src="./static/resource/share-2.png">
-      <img class="so-5" src="./static/resource/share-5.png" o-tap="owo.go('page1', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', true)">
+      <img class="so-5" src="./static/resource/share-5.png" o-tap="owo.go('page1', 'scaleDown', 'moveFromLeft', 'scaleDown', 'moveFromRight', true)">
       <img class="so-4" src="./static/resource/share-4.png" o-tap="owo.go('share', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', true)">
       <img class="show">
       <div class="text" id="text"></div>
     </div>
     <!-- 页面[share]-->
     <div class="share-page owo" template="share" style="display: none;">
-      <img class="so-5" src="./static/resource/show-5.png">
-      <img class="so-4" src="./static/resource/show-4.png" o-tap="owo.go('page1', 'flipOutLeft', 'flipInRight&amp;&amp;delay500', 'flipOutRight', 'flipInLeft&amp;&amp;delay500', true)">
-      <img class="so-3" src="./static/resource/show-3.png" o-tap="document.getElementsByClassName('share-box')[0].style.display = 'block'">
-      <img class="so-6" src="./static/resource/show-6.png">
+      <img class="so-5 owo-animation-flicker" src="./static/resource/show-5.png" o-animation="flicker">
+      <img class="so-4" src="./static/resource/share-bottom-6.png" o-tap="owo.go('page1', 'scaleDown', 'moveFromLeft', 'scaleDown', 'moveFromRight', true)">
+      <img class="so-3" src="./static/resource/share-bottom-7.png" o-tap="document.getElementsByClassName('share-box')[0].style.display = 'block'">
+      <img class="so-4-1" src="./static/resource/share-bottom-4.png">
+      <img class="so-3-1" src="./static/resource/share-bottom-3.png">
+      <img class="so-5-1" src="./static/resource/share-bottom-5.png">
       <img class="show-image">
+      <div class="bottom-info">策划：郑紫豪、耿聪 设计：赵娜、马婷 技术：蒲鸽 </div>
     </div>
     <!-- 页面[game]-->
     <div class="game owo" template="game" style="display: none;"><canvas class="puzzle_game" id="puzzleGame"></canvas><canvas id="fireworks"></canvas>
@@ -106,8 +109,12 @@
       <img class="find" o-tap="find" src="./static/resource/help.png">
     </div>
     <!-- 页面[helpShare]-->
-    <div class="share-box owo-block" o-tap="hide" template="undefined">
+    <div class="share-box owo-block" o-tap="hide" template="helpShare">
       <img class="share-help" src="./static/resource/share.png">
+    </div>
+    <!-- 页面[playMusic]-->
+    <div class="music-menu owo-block" template="playMusic">
+      <img class="music-icon" src="./static/resource/music-close.png" o-tap="switchPlay">
     </div>
   </div>
 
@@ -121,7 +128,7 @@
   <script src="./static/js/main.js" type="text/javascript" charset="UTF-8"></script>
   <script src="./static/js/utils.js" type="text/javascript" charset="UTF-8"></script><!-- 框架script代码 -->
   <!-- 框架script文件 -->
-  <script src="./static/js/owo.main.8oqoya0rf3.js" type="text/javascript" charset="UTF-8"></script>
+  <script src="./static/js/owo.main.b5mhzxp8gdj.js" type="text/javascript" charset="UTF-8"></script>
   <script>
     /*
   存储每个页面的函数
@@ -179,7 +186,6 @@
       },
       "start": {
         "created": function created() {
-          console.log('sdsd');
           setTimeout(function() {
             owo.query('.mouse')[0].style.top = '408px';
           }, 500);
@@ -188,6 +194,7 @@
           owo.query('.mouse')[0].style.top = '';
           setTimeout(function() {
             owo.go('page1', 'scaleDown', 'moveFromRight', 'scaleDown', 'moveFromLeft', true);
+            owo.script.playMusic.play();
           }, 600);
         }
       },
@@ -237,19 +244,29 @@
             owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px';
           }
         },
-        "start": function start() {
+        "show": function show() {
           var _this3 = this;
+
+          setTimeout(function() {
+            _this3.replay();
+          }, 1000);
+        },
+        "toPlay": function toPlay() {
+          owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true);
+        },
+        "start": function start() {
+          var _this4 = this;
 
           this.$target.classList.add('active');
           var dom = owo.query('.text')[0];
           dom.innerText = this.data.list[0].text;
           if (this.data.checkMusic) this.data.checkMusic.play();
           this.data.clock = setInterval(function() {
-            if (_this3.data.listInd == _this3.data.list.length - 1) {
-              _this3.data.listInd = 0;
+            if (_this4.data.listInd == _this4.data.list.length - 1) {
+              _this4.data.listInd = 0;
             }
 
-            dom.innerText = _this3.data.list[++_this3.data.listInd].text;
+            dom.innerText = _this4.data.list[++_this4.data.listInd].text;
           }, 100);
         },
         "end": function end() {
@@ -303,7 +320,7 @@
           "difficulty": 1,
           "width": 720,
           "height": 1508,
-          "imageWidth": 510,
+          "imageWidth": 539,
           "imageHeight": 826,
           "imageRatio": null,
           "app": null,
@@ -321,7 +338,6 @@
           this.setDifficulty(); // 图片与视窗的比例
 
           this.data.imageRatio = this.data.imageWidth / this.data.width;
-          console.log("\u56FE\u7247\u6BD4\u4F8B: " + this.data.imageRatio);
           this.data.app = new PIXI.Application({
             width: this.data.width,
             height: this.data.height,
@@ -333,7 +349,7 @@
           this.init();
         },
         "eventHandle": function eventHandle() {
-          var _this4 = this;
+          var _this5 = this;
 
           // 事件兼容
           if (window.hasOwnProperty('ontouchstart') === true) {
@@ -353,11 +369,11 @@
           }); // 做挂起监听
 
           document.addEventListener('visibilitychange', function(e) {
-            e.hidden === true ? _this4.pause() : _this4.data.isOff !== true && _this4.resume();
+            e.hidden === true ? _this5.pause() : _this5.data.isOff !== true && _this5.resume();
           }, true);
         },
         "init": function init() {
-          var _this5 = this;
+          var _this6 = this;
 
           // 拼图容器
           this.data.puzzle = new PIXI.Container();
@@ -374,14 +390,17 @@
           loader.add([{
             name: 'clipart',
             url: './static/resource/clipart.png'
+          }, {
+            name: 'picture',
+            url: this.data.picture
           }]).load(function() {
-            _this5.loaded = true;
+            console.log(PIXI.utils.TextureCache['picture']);
 
-            _this5.start();
+            _this6.start();
           });
         },
         "start": function start() {
-          var _this6 = this;
+          var _this7 = this;
 
           // 销毁上次的拼块
           this.destroyCliparts(); // 清空所有动画
@@ -392,49 +411,49 @@
 
           var afterLoad = function afterLoad() {
             // 生成拼图的底层纹理 
-            var originBase = new PIXI.Sprite(PIXI.utils.TextureCache[_this6.data.picture]); // 设置尺寸
+            var originBase = new PIXI.Sprite(PIXI.utils.TextureCache['picture']); // 设置尺寸
 
-            originBase.width = _this6.data.imageWidth;
-            originBase.height = _this6.data.imageHeight; // console.log(originBase)
+            originBase.width = _this7.data.imageWidth;
+            originBase.height = _this7.data.imageHeight; // console.log(originBase)
             // this.base 挂载原始图片的快照 
 
-            _this6.base = originBase.generateCanvasTexture(_this6.data.app.renderer); // 拼图的底片 
+            _this7.base = originBase.generateCanvasTexture(_this7.data.app.renderer); // 拼图的底片 
 
-            _this6.negative = new PIXI.Sprite(_this6.base);
+            _this7.negative = new PIXI.Sprite(_this7.base);
 
-            _this6.negative.set({
-              width: _this6.data.imageWidth,
-              x: _this6.data.puzzle.x,
-              y: _this6.data.puzzle.y,
-              pivotX: _this6.data.puzzle.pivotX,
-              pivotY: _this6.data.puzzle.pivotY,
+            _this7.negative.set({
+              width: _this7.data.imageWidth,
+              x: _this7.data.puzzle.x,
+              y: _this7.data.puzzle.y,
+              pivotX: _this7.data.puzzle.pivotX,
+              pivotY: _this7.data.puzzle.pivotY,
               alpha: .2,
               visible: false
             });
 
-            _this6.data.app.stage.addChildAt(_this6.negative, 1);
+            _this7.data.app.stage.addChildAt(_this7.negative, 1);
 
-            _this6.clip(); // 拼图收缩
+            _this7.clip(); // 拼图收缩
 
 
-            TweenMax.fromTo(_this6.data.puzzle, 1, {
-              scaleX: 1 / _this6.data.imageRatio,
-              scaleY: 1 / _this6.data.imageRatio
+            TweenMax.fromTo(_this7.data.puzzle, 1, {
+              scaleX: 1 / _this7.data.imageRatio,
+              scaleY: 1 / _this7.data.imageRatio
             }, {
               scaleX: 1,
               scaleY: 1,
               // 拼图分散后，倒计时开始
               onComplete: function onComplete() {
-                return _this6["break"]();
+                return _this7["break"]();
               }
             });
           }; // 判断拼图是否已经加载过
 
 
-          PIXI.loader.resources[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad);
+          PIXI.utils.TextureCache[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad);
         },
         "destroyCliparts": function destroyCliparts() {
-          var _this7 = this;
+          var _this8 = this;
 
           this.data.cliparts.forEach(function(clipart) {
             var sprite = clipart.sprite,
@@ -443,8 +462,8 @@
               parentB = clipart.selected.parent;
             sprite.destroy();
             selected.destroy();
-            parentA !== null && parentA !== _this7.data.puzzle && parentA.destroy();
-            parentB !== null && parentB !== _this7.data.puzzle && parentB.destroy();
+            parentA !== null && parentA !== _this8.data.puzzle && parentA.destroy();
+            parentB !== null && parentB !== _this8.data.puzzle && parentB.destroy();
           });
           this.negative && this.negative.destroy();
         },
@@ -522,7 +541,8 @@
                 left: x,
                 top: y,
                 mask: mask,
-                cacheAsBitmap: true
+                cacheAsBitmap: true,
+                interactive: true
               });
               clipart.selected.set({
                 mask: mask,
@@ -577,7 +597,7 @@
           delete this.data.startPositions[identifier];
         },
         "break": function _break() {
-          var _this8 = this;
+          var _this9 = this;
 
           var _this = this; // this.data.puzzle 的坐标
 
@@ -595,12 +615,12 @@
             },
             // 标记禁区
             rectangles: [ // 中心拼图底图区
-              // {
-              //   x: (this.data.width - this.data.imageWidth) / 2, 
-              //   y: (this.data.height- this.data.imageHeight) / 2, 
-              //   width: this.data.imageWidth, 
-              //   height: this.data.imageHeight
-              // }
+              {
+                x: (this.data.width - this.data.imageWidth) / 4,
+                y: (this.data.height - this.data.imageHeight) / 4,
+                width: this.data.imageWidth / 2,
+                height: this.data.imageHeight / 2
+              }
             ]
           }; // console.log('--------------')
           // console.log(this.gridProps)
@@ -632,8 +652,8 @@
               _ref2$data = _ref2.data,
               endPosition = _ref2$data.global,
               identifier = _ref2$data.identifier;
-            var activeClipart = _this8.data.activeCliparts[identifier] || null;
-            var startPosition = _this8.data.startPositions[identifier] || null;
+            var activeClipart = _this9.data.activeCliparts[identifier] || null;
+            var startPosition = _this9.data.startPositions[identifier] || null;
 
             if (activeClipart !== null && startPosition !== null) {
               if (--activeClipart.negativeCount >= 0) {
@@ -643,7 +663,7 @@
               var left = activeClipart.x0 + endPosition.x - startPosition.x;
               var top = activeClipart.y0 + endPosition.y - startPosition.y; // 侧滑会导致负坐标直接调用touchend
 
-              if (left < -_this8.data.puzzle.x) {
+              if (left < -_this9.data.puzzle.x) {
                 touchendHandle({
                   data: data
                 });
@@ -660,7 +680,7 @@
 
           var touchendHandle = function touchendHandle(_ref3) {
             var identifier = _ref3.data.identifier;
-            var activeClipart = _this8.data.activeCliparts[identifier] || null;
+            var activeClipart = _this9.data.activeCliparts[identifier] || null;
             if (activeClipart === null) return; // console.log(activeClipart, identifier)
 
             _this.activeClipartItem(activeClipart, identifier);
@@ -678,12 +698,12 @@
 
             sprite.interactive = true; // 添加事件
 
-            sprite.on(_this8.touchstart, function(_ref4) {
+            sprite.on(_this9.touchstart, function(_ref4) {
               var _ref4$data = _ref4.data,
                 position = _ref4$data.global,
                 identifier = _ref4$data.identifier;
               // 暂停中
-              if (_this8.paused === true) return; // 固定
+              if (_this9.paused === true) return; // 固定
 
               if (clipart.lock === true) {
                 // 禁止交互
@@ -716,8 +736,8 @@
                 });
               }
 
-              _this8.data.activeCliparts[identifier] = clipart;
-              _this8.data.startPositions[identifier] = {
+              _this9.data.activeCliparts[identifier] = clipart;
+              _this9.data.startPositions[identifier] = {
                 x: position.x,
                 y: position.y
               };
@@ -899,10 +919,10 @@
           // console.log(this.data.puzzle.children)
         },
         "endCall": function endCall() {
+          var _this10 = this;
+
           var num = 0;
-          console.log(this.data.cliparts);
           this.data.cliparts.forEach(function(element) {
-            console.log(element.sprite.interactive);
             if (element.sprite.interactive) num++;
           });
 
@@ -914,6 +934,7 @@
                 canvas: document.getElementById('fireworks'),
                 callback: function callback() {
                   setTimeout(function() {
+                    _this10.$dom.fireworks.style.display = 'none';
                     owo.go('pass', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true);
                   }, 500);
                 }
@@ -935,7 +956,7 @@
         },
         "find": function find() {
           // 
-          console.log(this.data.puzzle);
+          console.log(this.data.cliparts);
           var childrenItem = this.data.puzzle.children[0];
 
           for (var index = 0; index < this.data.cliparts.length; index++) {
@@ -970,9 +991,40 @@
           // TweenMax.fromTo(this.data.puzzle.children[0], .6, {}, {x: 100, y: 100, ease: Linear.easeNone})
         }
       },
-      "undefined": {
+      "helpShare": {
         "hide": function hide() {
           this.$el.style.display = 'none';
+        }
+      },
+      "playMusic": {
+        "data": {
+          "music": null,
+          "musicIsPlay": false
+        },
+        "switchPlay": function switchPlay() {
+          this.data.musicIsPlay ? this.pause() : this.play();
+        },
+        "play": function play() {
+          console.log('播放音乐');
+
+          if (!this.data.musicIsPlay) {
+            this.data.musicIsPlay = true;
+            this.data.music = new Audio("./static/resource/bg.mp3");
+            this.data.music.loop = true;
+            this.data.music.play();
+            var icon = document.getElementsByClassName('music-icon')[0];
+            icon.src = './static/resource/music-play.png';
+            icon.classList.add('active');
+          }
+        },
+        "pause": function pause() {
+          if (this.data.musicIsPlay) {
+            this.data.musicIsPlay = false;
+            this.data.music.pause();
+            var icon = document.getElementsByClassName('music-icon')[0];
+            icon.src = './static/resource/music-close.png';
+            icon.classList.remove('active');
+          }
         }
       }
     };

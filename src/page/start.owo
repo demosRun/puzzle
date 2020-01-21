@@ -19,7 +19,6 @@
     data: {
     },
     created: function () {
-      console.log('sdsd')
       setTimeout(() => {
         owo.query('.mouse')[0].style.top = '408px'
       }, 500);
@@ -28,6 +27,7 @@
       owo.query('.mouse')[0].style.top = ''
       setTimeout(() => {
         owo.go('page1', 'scaleDown', 'moveFromRight', 'scaleDown', 'moveFromLeft', true)
+        owo.script.playMusic.play()
       }, 600)
     }
   }

@@ -17,7 +17,7 @@
       width: 720,
       height: 1508,
       // 拼图尺寸
-      imageWidth: 510,
+      imageWidth: 539,
       imageHeight: 826,
       imageRatio: null,
       // PIXI实例
@@ -39,7 +39,6 @@
       this.setDifficulty()
       // 图片与视窗的比例
       this.data.imageRatio = this.data.imageWidth / this.data.width
-      console.log(`图片比例: ${this.data.imageRatio}`)
       this.data.app = new PIXI.Application({
         width: this.data.width, 
         height: this.data.height, 
@@ -85,8 +84,9 @@
 
       let loader = new PIXI.loaders.Loader()
       // 加载必须图片
-      loader.add([{name: 'clipart', url: '@|clipart.png|'}]).load(() => {
-        this.loaded = true
+      loader.add([{name: 'clipart', url: '@|clipart.png|'}, {name: 'picture', url: this.data.picture}]).load(() => {
+        
+        console.log(PIXI.utils.TextureCache['picture'])
         this.start()
       })
     },
@@ -99,7 +99,7 @@
       this.data.isOff === true && this.turnOn()
       let afterLoad = () => {
         // 生成拼图的底层纹理 
-        let originBase = new PIXI.Sprite(PIXI.utils.TextureCache[this.data.picture])
+        let originBase = new PIXI.Sprite(PIXI.utils.TextureCache['picture'])
         // 设置尺寸
         originBase.width = this.data.imageWidth
         originBase.height = this.data.imageHeight
@@ -136,7 +136,7 @@
         )
       }
       // 判断拼图是否已经加载过
-      PIXI.loader.resources[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad)
+      PIXI.utils.TextureCache[this.data.picture] ? afterLoad() : PIXI.loader.add(this.data.picture).load(afterLoad)
     },
     // 销毁所有拼块
     destroyCliparts: function () {
@@ -226,8 +226,9 @@
             {
               left: x,  
               top: y, 
-              mask: mask, 
-              cacheAsBitmap: true 
+              mask: mask,
+              cacheAsBitmap: true ,
+              interactive: true
             }
           )
           clipart.selected.set(
@@ -265,7 +266,7 @@
         {
           top: activeClipart.selected.top, 
           left: activeClipart.selected.left, 
-          rotate: activeClipart.selected.rotate
+          rotate: activeClipart.selected.rotate,
         }
       )
 
@@ -296,7 +297,7 @@
       let [x, y] = [bounds.x, bounds.y]
       this.gridProps = {
         width: this.data.width, 
-        height: this.data.height, 
+        height: this.data.height,
         // 最小面积
         cell: {
           width: this.data.clipart.width * .8
@@ -304,12 +305,12 @@
         // 标记禁区
         rectangles: [
           // 中心拼图底图区
-          // {
-          //   x: (this.data.width - this.data.imageWidth) / 2, 
-          //   y: (this.data.height- this.data.imageHeight) / 2, 
-          //   width: this.data.imageWidth, 
-          //   height: this.data.imageHeight
-          // }
+          {
+            x: (this.data.width - this.data.imageWidth) / 4, 
+            y: (this.data.height- this.data.imageHeight) / 4, 
+            width: this.data.imageWidth / 2, 
+            height: this.data.imageHeight / 2
+          }
         ]
       }
       // console.log('--------------')
@@ -583,9 +584,8 @@
     },
     endCall: function () {
       let num = 0
-      console.log(this.data.cliparts)
+      
       this.data.cliparts.forEach(element => {
-        console.log(element.sprite.interactive)
         if (element.sprite.interactive) num++
       });
       if(num === 0) {
@@ -596,6 +596,7 @@
             canvas: document.getElementById('fireworks'),
             callback: () => {
               setTimeout(() => {
+                this.$dom.fireworks.style.display = 'none'
                 owo.go('pass', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)
               }, 500)
             }
@@ -618,7 +619,7 @@
     },
     find: function () {
       // 
-      console.log(this.data.puzzle)
+      console.log(this.data.cliparts)
       const childrenItem = this.data.puzzle.children[0]
 
       for (let index = 0; index < this.data.cliparts.length; index++) {
@@ -653,7 +654,7 @@
 <style lang="less">
 .game {
   background-color: white;
-  background-image: url('@|shade.jpg|');
+  background-image: url('@|bg.jpg|');
 }
 #fireworks {
   position: absolute;

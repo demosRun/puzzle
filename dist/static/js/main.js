@@ -28,6 +28,10 @@ function getScale () {
 
 getScale()
 
+document.addEventListener("WeixinJSBridgeReady", function () {
+  owo.script.playMusic.play()
+}, false)
+
 let timer = null
 window.onresize = () => {
   // console.log(timer)

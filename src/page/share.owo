@@ -1,10 +1,13 @@
 <template lang="pug">
 .share-page
-  img.so-5(src="@|show-5.png|")
-  img.so-4(src="@|show-4.png|"  o-tap="owo.go('page1', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)")
-  img.so-3(src="@|show-3.png|" o-tap="document.getElementsByClassName('share-box')[0].style.display = 'block'")
-  img.so-6(src="@|show-6.png|")
+  img.so-5(src="@|show-5.png|" o-animation="flicker")
+  img.so-4(src="@|share-bottom-6.png|"  o-tap="owo.go('page1', 'scaleDown', 'moveFromLeft', 'scaleDown', 'moveFromRight', true)")
+  img.so-3(src="@|share-bottom-7.png|" o-tap="document.getElementsByClassName('share-box')[0].style.display = 'block'")
+  img.so-4-1(src="@|share-bottom-4.png|")
+  img.so-3-1(src="@|share-bottom-3.png|")
+  img.so-5-1(src="@|share-bottom-5.png|")
   img.show-image
+  .bottom-info 策划：郑紫豪、耿聪&emsp;设计：赵娜、马婷&emsp;技术：蒲鸽 
 </template>
 
 <script>
@@ -27,19 +30,19 @@
   position: absolute;
   left: 302px;
   z-index: 5;
-  top: 1134px
+  top: 1010px
 }
 .so-4 {
   position: absolute;
-  left: 70px;
-  z-index: 4;
-  top: 1199px
+  left: 125px;
+  z-index: 6;
+  top: 1049px;
 }
 .so-3 {
   position: absolute;
-  left: 492px;
-  z-index: 3;
-  top: 1199px
+  left: 434px;
+  z-index: 7;
+  top: 1049px;
 }
 .so-6 {
   position: absolute;
@@ -49,7 +52,7 @@
 }
 .show-image {
   position: absolute;
-  height: 63%;
+  height: 56%;
   left: 0;
   right: 0;
   margin: auto;
@@ -57,5 +60,34 @@
   z-index: 99;
   pointer-events: all;
   user-select: auto;
+  box-shadow: 2px 4px 13px #b9322e;
+}
+.so-4-1 {
+  position: absolute;
+  left: 126px;
+  z-index: 4;
+  top: 1193px
+}
+.so-3-1 {
+  position: absolute;
+  left: 326px;
+  z-index: 3;
+  top: 1181px
+}
+.so-5-1 {
+  position: absolute;
+  left: 440px;
+  z-index: 5;
+  top: 1193px
+}
+.bottom-info {
+  position: absolute;
+  bottom: 14%;
+  text-align: center;
+  width: 100%;
+  color: white;
+  font-size: 19px;
+  line-height: 26px;
+  opacity: 0.8;
 }
 </style>

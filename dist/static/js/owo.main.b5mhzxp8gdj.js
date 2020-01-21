@@ -1,4 +1,4 @@
-// Mon Jan 20 2020 17:56:37 GMT+0800 (GMT+08:00)
+// Tue Jan 21 2020 15:29:30 GMT+0800 (GMT+08:00)
 var owo = {tool: {},state: {},};
 /* 方法合集 */
 var _owo = {}
@@ -18,13 +18,10 @@ _owo.runCreated = function (pageFunction) {
     if (pageFunction.created) {
       pageFunction.created.apply(pageFunction)
     }
-    
   } catch (e) {
     console.error(e)
   }
 }
-
-
 
 
 // 判断是否为手机
@@ -94,6 +91,20 @@ function shaheRun (code) {
 _owo.handleEvent = function (moudleScript) {
   if (!moudleScript.$el) throw 'error'
   var tempDom = moudleScript.$el
+  // 判断是否有o-for需要处理
+  if (moudleScript.for && moudleScript.for.length > 0) {
+    // 处理o-for
+    for (const key in moudleScript.for) {
+      const forItem = moudleScript.for[key];
+      const forDomList = tempDom.querySelectorAll(`[o-temp-for="${forItem.for}"]`)
+      if (forDomList.length > 0) {
+        forDomList[0].outerHTML = forItem.template
+        for (let domIndex = 1; domIndex < forDomList.length; domIndex++) {
+          forDomList[domIndex].remove()
+        }
+      }
+    }
+  }
   // 递归处理元素属性
   function recursion(tempDom) {
     if (tempDom.attributes) {
@@ -135,7 +146,7 @@ _owo.handleEvent = function (moudleScript) {
     }
     // 判断是否有子节点需要处理
     if (tempDom.children) {
-      
+      // 
       // 递归处理所有子Dom结点
       for (var i = 0; i < tempDom.children.length; i++) {
         // 获取子节点实例
@@ -427,20 +438,20 @@ _owo._event_tap = function (tempDom, eventFor, callBack) {
   // 变量
   var startTime = 0
   var isMove = false
-  tempDom.addEventListener('touchstart', function() {
+  tempDom.ontouchstart = function () {
     startTime = Date.now();
-  })
-  tempDom.addEventListener('touchmove', function() {
+  }
+  tempDom.ontouchmove = function () {
     isMove = true
-  })
-  tempDom.addEventListener('touchend', function(e) {
+  }
+  tempDom.ontouchend = function (e) {
     if (Date.now() - startTime < 300 && !isMove) {
       callBack(e, eventFor)
     }
     // 清零
     startTime = 0;
     isMove = false
-  })
+  }
 }
 /**
  * 赋予节点动画效果

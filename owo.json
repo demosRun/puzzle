@@ -155,6 +155,11 @@
 			"name": "helpShare",
 			"src": "./src/page/helpShare.owo",
 			"type": "block"
+		},
+		{
+			"name": "playMusic",
+			"src": "./src/page/playMusic.owo",
+			"type": "block"
 		}
 	],
 	"mode": {

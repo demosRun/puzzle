@@ -22,7 +22,7 @@
   .blinker
     img.prop-2(src="@|prop-2.png|")
     img.prop-4(src="@|prop-4.png|" o-tap="replay")
-    img.prop-3(src="@|prop-3.png|" o-tap="owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)")
+    img.prop-3(src="@|prop-3.png|" o-tap="toPlay")
     .play-text 「鸿运当头」
     .play-text-2 鸿运当头
 </template>
@@ -49,6 +49,14 @@
       if (window.translationScaleY) {
         owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px'
       }
+    },
+    show: function () {
+      setTimeout(() => {
+        this.replay()
+      }, 1000);
+    },
+    toPlay: function () {
+      owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)
     },
     start: function () {
       this.$target.classList.add('active')
