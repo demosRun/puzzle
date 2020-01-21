@@ -286,7 +286,7 @@
       } else {
         // 不合适的位置
         // 替换成正常拼块
-        new Audio("@|空鞭抽出.mp3|").play()
+        new Audio("@|noRight.wav|").play()
         this.data.puzzle.addChildAt(activeClipart.sprite, index)
       } 
 
@@ -627,7 +627,8 @@
       this.data.app.ticker.start()
     },
     find: function () {
-      // 
+      // 播放按钮音乐 button.wav
+      new Audio("@|button.wav|").play()
       console.log(this.data.cliparts)
       const childrenItem = this.data.puzzle.children[0]
 

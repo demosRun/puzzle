@@ -49,13 +49,12 @@
     
 
     <script src="http://tools.people.com.cn/libs/jquery/1.11.1/jquery-1.11.1.min.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/TweenMax.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/pixi.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/gridistribution.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/pixi-extra-filters.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/surprise.js" type="text/javascript"  charset="UTF-8"></script>
+    <script src="./static/js/TweenMax.js" type="text/javascript" defer="defer" charset="UTF-8"></script>
+    <script src="./static/js/pixi.min.js" type="text/javascript" defer="defer" charset="UTF-8"></script>
+    <script src="./static/js/gridistribution.js" type="text/javascript" defer="defer" charset="UTF-8"></script>
+    <script src="./static/js/surprise.js" type="text/javascript" defer="defer" charset="UTF-8"></script>
     <script src="./static/js/main.js" type="text/javascript"  charset="UTF-8"></script>
-    <script src="./static/js/utils.js" type="text/javascript"  charset="UTF-8"></script><!-- 框架script代码 --><!-- 框架script文件 -->
+    <script src="./static/js/utils.js" type="text/javascript" defer="defer" charset="UTF-8"></script><!-- 框架script代码 --><!-- 框架script文件 -->
 <script src="./static/js/owo.main.js" type="text/javascript" charset="UTF-8"></script>
 <script>/*
   存储每个页面的函数
@@ -164,9 +163,8 @@ owo.script = {
       "activeID": 9
     },
     "created": function created() {
-      this.data.checkMusic = new Audio("./static/resource/科技中信息传递.mp3");
-      this.data.checkMusic.loop = true;
-
+      // this.data.checkMusic = new Audio("./static/resource/科技中信息传递.mp3")
+      // this.data.checkMusic.loop = true
       if (window.translationScaleY) {
         owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px';
       }
@@ -519,7 +517,7 @@ owo.script = {
       } else {
         // 不合适的位置
         // 替换成正常拼块
-        new Audio("./static/resource/空鞭抽出.mp3").play();
+        new Audio("./static/resource/noRight.wav").play();
         this.data.puzzle.addChildAt(activeClipart.sprite, index);
       } // 清空对象
 
@@ -892,7 +890,8 @@ owo.script = {
       this.data.app.ticker.start();
     },
     "find": function find() {
-      // 
+      // 播放按钮音乐 button.wav
+      new Audio("./static/resource/button.wav").play();
       console.log(this.data.cliparts);
       var childrenItem = this.data.puzzle.children[0];
 
@@ -948,6 +947,7 @@ owo.script = {
       if (!this.data.musicIsPlay) {
         this.data.musicIsPlay = true;
         this.data.music = new Audio("./static/resource/bg.mp3");
+        this.data.music.volume = 0.2;
         this.data.music.loop = true;
         this.data.music.play();
         var icon = document.getElementsByClassName('music-icon')[0];

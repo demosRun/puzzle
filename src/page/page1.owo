@@ -44,8 +44,8 @@
       activeID: 9
     },
     created: function () {
-      this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
-      this.data.checkMusic.loop = true
+      // this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
+      // this.data.checkMusic.loop = true
       if (window.translationScaleY) {
         owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px'
       }

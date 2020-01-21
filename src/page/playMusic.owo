@@ -17,6 +17,7 @@
       if (!this.data.musicIsPlay) {
         this.data.musicIsPlay = true
         this.data.music = new Audio("@|bg.mp3|")
+        this.data.music.volume = 0.2
         this.data.music.loop = true
         this.data.music.play()
         const icon = document.getElementsByClassName('music-icon')[0]

@@ -79,24 +79,23 @@
 		},
 		{
 			"name": "TweenMax",
-			"src": "./src/resource/TweenMax.js"
+			"src": "./src/resource/TweenMax.js",
+			"defer": true
 		},
 		{
-			"name": "pixi",
-			"src": "./src/resource/pixi.js"
+			"name": "pixi.min",
+			"src": "./src/resource/pixi.min.js",
+			"defer": true
 		},
 		{
 			"name": "gridistribution",
-			"src": "./src/resource/gridistribution.js"
-		},
-		{
-			"name": "pixi-extra-filters",
-			"src": "./src/resource/pixi-extra-filters.js"
+			"src": "./src/resource/gridistribution.js",
+			"defer": true
 		},
 		{
 			"name": "surprise",
 			"src": "./src/resource/surprise.js",
-			"resource": true
+			"defer": true
 		},
 		{
 			"name": "main",
@@ -105,7 +104,8 @@
 		},
 		{
 			"name": "utils",
-			"src": "./src/utils.js"
+			"src": "./src/utils.js",
+			"defer": true
 		}
 	],
 	"styleList": [
