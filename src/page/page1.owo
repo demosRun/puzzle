@@ -74,7 +74,7 @@
       if (this.data.checkMusic) this.data.checkMusic.pause()
       clearInterval(this.data.clock)
       this.$target.style.display = 'none'
-      this.$target.classList.remove('active')
+      // this.$target.classList.remove('active')
       // 活跃id
       const id = this.data.list[this.data.listInd].id
       this.data.activeID = id
@@ -86,19 +86,19 @@
       owo.query('.blinker .play-text')[0].innerText = `「${this.data.list[this.data.listInd].text}」`
       owo.query('.blinker .play-text-2')[0].innerText = `${this.data.list[this.data.listInd].text}`
       // 信封往下
-      setTimeout(() => {
-        owo.query('.rat')[0].classList.add('active')
-      }, 800)
+      // setTimeout(() => {
+      //   owo.query('.rat')[0].classList.add('active')
+      // }, 800)
       setTimeout(() => {
         owo.query('.blinker')[0].classList.add('show')
-      }, 2000)
+      }, 500)
     },
     replay: function () {
       owo.query('.blinker')[0].classList.remove('show')
       owo.query('.so-15')[0].style.display = 'block'
-      setTimeout(() => {
-        owo.query('.rat')[0].classList.remove('active')
-      }, 1000)
+      // setTimeout(() => {
+      //   owo.query('.rat')[0].classList.remove('active')
+      // }, 1000)
       owo.query('.lable').forEach(element => {
         element.style.display = 'none'
       })
@@ -248,12 +248,13 @@
 }
 .play-text {
   position: absolute;
-  top: 730px;
+  top: 703px;
   left: 258px;
   z-index: 9;
   color: #fe5838;
   font-size: 34px;
   font-weight: bold;
+  line-height: 40px;
 }
 .envelope {
   position: absolute;

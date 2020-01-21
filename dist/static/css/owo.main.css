@@ -448,12 +448,13 @@ li {
 
 .page-1 .play-text {
   position: absolute;
-  top: 730px;
+  top: 703px;
   left: 258px;
   z-index: 9;
   color: #fe5838;
   font-size: 34px;
   font-weight: bold;
+  line-height: 40px;
 }
 
 .page-1 .envelope {
@@ -498,14 +499,14 @@ li {
   position: absolute;
   left: 124px;
   z-index: 3;
-  top: 289px;
+  top: 259px;
 }
 
 .pass-page .so-2 {
   position: absolute;
   left: 82px;
   z-index: 2;
-  top: 229px;
+  top: 199px;
 }
 
 .pass-page .so-5 {
@@ -528,14 +529,14 @@ li {
   left: 1px;
   right: 0;
   margin: auto;
-  top: 440px;
+  top: 410px;
   width: 510px;
   height: 765px;
 }
 
 .pass-page .text {
   position: absolute;
-  top: 306px;
+  top: 276px;
   font-size: 36px;
   z-index: 9;
   text-align: center;
@@ -715,6 +716,8 @@ li {
   position: absolute;
   right: 10px;
   top: 10%;
+  width: 67px;
+  height: 67px;
   z-index: 999;
 }
 

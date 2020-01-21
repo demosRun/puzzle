@@ -42,6 +42,8 @@
   position: absolute;
   right: 10px;
   top: 10%;
+  width: 67px;
+  height: 67px;
   z-index: 999;
 }
 .active {

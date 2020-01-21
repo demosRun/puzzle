@@ -108,17 +108,19 @@
         this.base = originBase.generateCanvasTexture(this.data.app.renderer)
         // 拼图的底片 
         this.negative = new PIXI.Sprite(this.base)
+        
+
+        this.data.app.stage.addChildAt(this.negative, 1)
         this.negative.set({
           width: this.data.imageWidth,
           x: this.data.puzzle.x, 
           y: this.data.puzzle.y, 
           pivotX: this.data.puzzle.pivotX, 
           pivotY: this.data.puzzle.pivotY, 
-          alpha: .2, 
-          visible: false
+          alpha: .1, 
+          visible: false,
+          index: 0
         })
-
-        this.data.app.stage.addChildAt(this.negative, 1)
         this.clip()
         // 拼图收缩
         TweenMax.fromTo(
@@ -228,9 +230,12 @@
               top: y, 
               mask: mask,
               cacheAsBitmap: true ,
-              interactive: true
+              interactive: true,
+              alpha: 1
             }
           )
+          // 块
+          console.log(clipart.sprite)
           clipart.selected.set(
             { 
               mask: mask, 
@@ -305,12 +310,12 @@
         // 标记禁区
         rectangles: [
           // 中心拼图底图区
-          {
-            x: (this.data.width - this.data.imageWidth) / 4, 
-            y: (this.data.height- this.data.imageHeight) / 4, 
-            width: this.data.imageWidth / 2, 
-            height: this.data.imageHeight / 2
-          }
+          // {
+          //   x: (this.data.width - this.data.imageWidth) / 4, 
+          //   y: (this.data.height- this.data.imageHeight) / 4, 
+          //   width: this.data.imageWidth / 2, 
+          //   height: this.data.imageHeight / 2
+          // }
         ]
       }
       // console.log('--------------')
@@ -570,14 +575,15 @@
         )
         this.data.app.stage.addChildAt(parent, 2)
       }
-      clipart.sprite.interactive = false
+     
       // 当前拼块安装到对应的容器
       parent.addChild(clipart.sprite)
+       clipart.sprite.interactive = false
       // 播放正确音效
       new Audio("@|鼠标在木桌放下.mp3|").play()
       // 容器的动画
       parent.tween && parent.tween.kill()
-      parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: 1, index: 0, ease: Linear.easeNone})
+      parent.tween = TweenMax.fromTo(parent, .6, {alpha: .4}, {alpha: .6, index: 0, ease: Linear.easeNone})
       this.endCall()
       // 判断游戏是否通关
       // console.log(this.data.puzzle.children)
@@ -589,6 +595,9 @@
         if (element.sprite.interactive) num++
       });
       if(num === 0) {
+        this.data.cliparts.forEach(clipart => {
+          TweenMax.fromTo(clipart.sprite, .3, {}, {alpha: 1, ease: Linear.easeNone})
+        })
         this.$dom.fireworks.style.display = 'block'
         new Audio("@|烟花咚啾音效.mp3|").play()
         setTimeout(() => {
@@ -626,7 +635,7 @@
         const element = this.data.cliparts[index];
         if (element.sprite.interactive) {
           element.sprite.interactive = false
-          TweenMax.fromTo(element.sprite, .3, {}, {left: element.startX, top: element.startY, rotate: 0, ease: Linear.easeNone})
+          TweenMax.fromTo(element.sprite, .3, {}, {left: element.startX, alpha: .6, top: element.startY, rotate: 0, ease: Linear.easeNone})
           break
         }
       }

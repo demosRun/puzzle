@@ -178,6 +178,7 @@ Object.defineProperties(proto, {
 		set: function(value) {
 			if(this._index !== value) {
 				this._index = value
+				console.log(this)
 				this.parent.setChildIndex(this, value)
 			}
 		}, 

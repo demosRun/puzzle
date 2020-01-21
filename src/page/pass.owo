@@ -29,13 +29,13 @@
   position: absolute;
   left: 124px;
   z-index: 3;
-  top: 289px
+  top: 259px
 }
 .so-2 {
   position: absolute;
   left: 82px;
   z-index: 2;
-  top: 229px
+  top: 199px;
 }
 .so-5 {
   position: absolute;
@@ -55,13 +55,13 @@
   left: 1px;
   right: 0;
   margin: auto;
-  top: 440px;
+  top: 410px;
   width: 510px;
   height: 765px;
 }
 .text {
   position: absolute;
-  top: 306px;
+  top: 276px;
   font-size: 36px;
   z-index: 9;
   text-align: center;
