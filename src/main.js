@@ -15,9 +15,14 @@ function getScale () {
     // console.log(window.innerHeight, deviseH * scale)
     window.translationScaleY = window.innerHeight - deviseH * scale
     scaleBox.style.transformOrigin = `0 ${(window.translationScaleY) + 'px' } 0`
-    
   } else {
+    window.translationScale = 1
+    window.translationScaleY = 1
     document.body.classList.add('pc')
+    setTimeout(() => {
+      owo.tool.toast('建议使用手机竖屏浏览哦!')
+    }, 0);
+    
     var scale = (window.innerHeight / deviseH).toFixed(2)
     scaleBox.style.width = deviseW + 'px'
     scaleBox.style.height = deviseH + 'px'

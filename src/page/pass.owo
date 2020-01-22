@@ -2,8 +2,8 @@
 .pass-page
   img.so-3(src="@|share-3.png|")
   img.so-2(src="@|share-2.png|")
-  img.so-5(src="@|share-5.png|" o-tap="owo.go('page1', 'scaleDown', 'moveFromLeft', 'scaleDown', 'moveFromRight', true)")
-  img.so-4(src="@|share-4.png|" o-tap="owo.go('share', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)")
+  img.so-5.button(src="@|share-5.png|" o-tap="replay")
+  img.so-4.button(src="@|share-4.png|" o-tap="next")
   img.show
   .text#text
 </template>
@@ -15,6 +15,14 @@
     show: function () {
       owo.query('.show')[0].src = owo.script.game.data.picture
       this.$dom.text.innerText = `「${owo.script.page1.data.list[owo.script.page1.data.listInd].text}」拼图完成`
+    },
+    replay: function () {
+      owo.script.start.data.buttonMusic.play()
+      owo.go('page1', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)
+    },
+    next: function () {
+      owo.script.start.data.buttonMusic.play()
+      owo.go('share', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)
     }
   }
 </script>

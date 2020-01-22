@@ -177,7 +177,8 @@
 			"serverPort": 8000,
 			"server": true,
 			"autoReload": true,
-			"remoteDebug": false
+			"remoteDebug": false,
+			"startAtHome": false
 		},
 		"build": {
 			"debug": false,

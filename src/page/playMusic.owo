@@ -1,6 +1,6 @@
 <template lang="pug">
 .music-menu
-  img.music-icon(src="@|music-close.png|" o-tap="switchPlay")
+  img.music-icon.button(src="@|music-close.png|" o-tap="switchPlay")
 </template>
 
 <script>
@@ -45,7 +45,7 @@
   top: 10%;
   width: 67px;
   height: 67px;
-  z-index: 999;
+  z-index: 99;
 }
 .active {
   animation: musicturn 12s linear infinite;

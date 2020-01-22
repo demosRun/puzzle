@@ -17,16 +17,19 @@
 <script>
   module.exports = {
     data: {
+      buttonMusic: null
     },
     created: function () {
+      this.data.buttonMusic = new Audio('@|button.wav|')
       setTimeout(() => {
         owo.query('.mouse')[0].style.top = '408px'
       }, 500);
     },
     start: function () {
+      owo.script.start.data.buttonMusic.play()
       owo.query('.mouse')[0].style.top = ''
       setTimeout(() => {
-        owo.go('page1', 'scaleDown', 'moveFromRight', 'scaleDown', 'moveFromLeft', true)
+        owo.go('page1', 'flipOutLeft', 'flipInRight&&delay500', 'flipOutRight', 'flipInLeft&&delay500', true)
         owo.script.playMusic.play()
       }, 600)
     }

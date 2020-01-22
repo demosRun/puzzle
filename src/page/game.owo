@@ -4,7 +4,7 @@
   canvas#fireworks
   //- 剩余数量
   .puzzle-info 剩余拼图：12块
-  img.find(o-tap="find" src="@|help.png|")
+  img.find.button(o-tap="find" src="@|help.png|")
 </template>
 
 <script>
@@ -30,6 +30,7 @@
       clipart: {},
       col: 0,
       row: 0,
+      cutSize: 300,
       // 拼图总数
       total: 0
     },
@@ -190,6 +191,7 @@
           }
           // 设置拼图属性
           let mask = new PIXI.Sprite(PIXI.utils.TextureCache['clipart'])
+          console.log(mask)
           this.data.app.stage.addChild(mask)
           mask.width = mask.height = this.data.clipart.width
           if(0 === row) {
@@ -235,7 +237,6 @@
             }
           )
           // 块
-          console.log(clipart.sprite)
           clipart.selected.set(
             { 
               mask: mask, 
@@ -452,8 +453,23 @@
         (resolve) => {
           let tl = new TimelineLite()
           tl.add(tweens, 0, 'start', .01).call(() => resolve())
+          this.startGame()
         }
       )
+    },
+    startGame: function () {
+      setTimeout(() => {
+        owo.tool.toast('移动拼块拼出拼图吧!')
+        // 自动完成一块
+        setTimeout(() => {
+          owo.query('.find')[0].classList.add('clicking')
+          setTimeout(() => {
+            this.find(11)
+            owo.query('.find')[0].classList.remove('clicking')
+          }, 300);
+        }, 200);
+      }, 500)
+      
     },
     // 设置难度
     setDifficulty: function () {
@@ -472,9 +488,9 @@
         @ 镂空 / 拼块宽 = 65 / 300
       */
       // 按照难度剪裁后的宽度
-      const width = this.data.imageWidth / (this.data.col * 235 / 300) >> 0
+      const width = this.data.imageWidth / (this.data.col * this.data.cutSize * 0.78 / this.data.cutSize) >> 0
       
-      const clipWidth = width * 65 / 300 >> 0
+      const clipWidth = width * this.data.cutSize * 0.22 / this.data.cutSize >> 0
       console.log(`拼图长宽: ${width}`)
       this.data.clipart = {
         width,
@@ -595,12 +611,17 @@
         if (element.sprite.interactive) num++
       });
       if(num === 0) {
-        this.data.cliparts.forEach(clipart => {
-          TweenMax.fromTo(clipart.sprite, .3, {}, {alpha: 1, ease: Linear.easeNone})
-        })
-        this.$dom.fireworks.style.display = 'block'
-        new Audio("@|烟花咚啾音效.mp3|").play()
+        
+        
         setTimeout(() => {
+          new Audio("@|烟花咚啾音效.mp3|").play()
+          this.data.cliparts.forEach(clipart => {
+            TweenMax.fromTo(clipart.sprite, .3, {}, {alpha: 1, ease: Linear.easeNone})
+          })
+          this.$dom.fireworks.style.display = 'block'
+        }, 0);
+        setTimeout(() => {
+          
           new Fireworks({
             canvas: document.getElementById('fireworks'),
             callback: () => {
@@ -610,7 +631,7 @@
               }, 500)
             }
           })
-        }, 0);
+        }, 100);
       }
       owo.query('.puzzle-info')[0].innerHTML = `剩余拼图: ${num}块`
     },
@@ -626,36 +647,28 @@
       TweenMax.resumeAll()
       this.data.app.ticker.start()
     },
-    find: function () {
-      // 播放按钮音乐 button.wav
-      new Audio("@|button.wav|").play()
-      console.log(this.data.cliparts)
-      const childrenItem = this.data.puzzle.children[0]
-
-      for (let index = 0; index < this.data.cliparts.length; index++) {
-        const element = this.data.cliparts[index];
-        if (element.sprite.interactive) {
+    find: function (num) {
+      if (num) {
+        const element = this.data.cliparts[num];
+        if (element && element.sprite.interactive) {
           element.sprite.interactive = false
           TweenMax.fromTo(element.sprite, .3, {}, {left: element.startX, alpha: .6, top: element.startY, rotate: 0, ease: Linear.easeNone})
-          break
+        }
+      } else {
+        // 播放按钮音乐 button.wav
+        new Audio("@|button.wav|").play()
+        for (let index = 0; index < this.data.cliparts.length; index++) {
+          const element = this.data.cliparts[index];
+          if (element.sprite.interactive) {
+            element.sprite.interactive = false
+            TweenMax.fromTo(element.sprite, .3, {}, {left: element.startX, alpha: .6, top: element.startY, rotate: 0, ease: Linear.easeNone})
+            break
+          }
         }
       }
+
+      
       this.endCall();
-      // this.data.app.stage.addChildAt(element.sprite, 0)
-      // this.data.cliparts.forEach(element => {
-      //   console.log(element.sprite.interactive)
-      //   // if (element.x0 == childrenItem.x && element.y0 == childrenItem.y) {
-      //   //   console.log(element)
-      //   //   element.sprite.x = element.x
-      //   //   element.sprite.y = element.y
-      //   //   element.sprite.rotate = 0
-      //   //   this.data.app.stage.addChildAt(element.sprite, 2)
-      //   // }
-      // });
-      // this.data.puzzle.removeChild(this.data.puzzle.children[0])
-      // this.data.puzzle.cremoveChild(this.data.puzzle.children[0])
-      // this.activeClipartItem(this.data.cliparts[0], 0)
-      // TweenMax.fromTo(this.data.puzzle.children[0], .6, {}, {x: 100, y: 100, ease: Linear.easeNone})
     }
   }
 </script>

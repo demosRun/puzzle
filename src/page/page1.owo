@@ -14,15 +14,15 @@
     img.so-11.lable(src="@|draw-11.png|")
     img.so-10.lable(src="@|draw-10.png|")
     img.so-9.lable(src="@|draw-9.png|")
-    .mouse.so-15(style="width: 328px; height: 328px; background-image: url(@|draw-15.png|)" o-touchstart="start" o-touchend="end" o-touchcancel="end")
+    .mouse.so-15(style="width: 328px; height: 328px; background-image: url(@|draw-15.png|)" o-mousedown="start" o-mouseup="end" o-touchstart="start" o-touchend="end" o-touchcancel="end")
     .text 开启惊喜
     // 信封
-    img.envelope(src="@|envelope.jpg|")
+    //- img.envelope(src="@|envelope.jpg|")
   // 选定后的弹窗
   .blinker
     img.prop-2(src="@|prop-2.png|")
-    img.prop-4(src="@|prop-4.png|" o-tap="replay")
-    img.prop-3(src="@|prop-3.png|" o-tap="toPlay")
+    img.prop-4.button(src="@|prop-4.png|" o-tap="replay")
+    img.prop-3.button(src="@|prop-3.png|" o-tap="toPlay")
     .play-text 「鸿运当头」
     .play-text-2 鸿运当头
 </template>
@@ -36,7 +36,12 @@
         {"text":"心想事成", "id":"12", "img":"@|12.jpg|", "showimg":"@|12-show.jpg|"},
         {"text":"万事如意", "id":"11", "img":"@|11.jpg|", "showimg":"@|11-show.jpg|"},
         {"text":"金榜题名", "id":"10", "img":"@|10.jpg|", "showimg":"@|10-show.jpg|"},
-        {"text":"鸿运当头", "id":"9", "img":"@|9.jpg|", "showimg":"@|9-show.jpg|"}
+        {"text":"鸿运当头", "id":"9", "img":"@|9.jpg|", "showimg":"@|9-show.jpg|"},
+        {"text":"心想事成", "id":"12", "img":"@|12.jpg|", "showimg":"@|12-show.jpg|"},
+        {"text":"财源广进", "id":"14", "img":"@|14.jpg|", "showimg":"@|14-show.jpg|"},
+        {"text":"人见人爱", "id":"13", "img":"@|13.jpg|", "showimg":"@|13-show.jpg|"},
+        {"text":"金榜题名", "id":"10", "img":"@|10.jpg|", "showimg":"@|10-show.jpg|"},
+        {"text":"鸿运当头", "id":"9", "img":"@|9.jpg|", "showimg":"@|9-show.jpg|"},
       ],
       checkMusic: null,
       clock: null,
@@ -46,9 +51,6 @@
     created: function () {
       // this.data.checkMusic = new Audio("@|科技中信息传递.mp3|")
       // this.data.checkMusic.loop = true
-      if (window.translationScaleY) {
-        owo.query('.envelope')[0].style.top = -200 - window.translationScaleY - 10 + 'px'
-      }
     },
     show: function () {
       setTimeout(() => {
@@ -56,6 +58,7 @@
       }, 1000);
     },
     toPlay: function () {
+      owo.script.start.data.buttonMusic.play()
       owo.go('game', 'flipOutRight', 'flipInLeft&&delay500', 'flipOutLeft', 'flipInRight&&delay500', true)
     },
     start: function () {
@@ -223,22 +226,25 @@
 }
 .prop-4 {
   position: absolute;
-  left: 145px;
+  left: 0;
+  right: 0;
   z-index: 4;
-  top: 889px
+  top: 934px;
+  margin: auto;
 }
 .prop-3 {
   position: absolute;
-  left: 428px;
+  left: 0;
+  right: 0;
   z-index: 3;
-  top: 889px
+  top: 842px;
+  margin: auto;
 }
 .blinker {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(219, 46, 33, 1);
-  background-image: url('@|loading-bg.png|');
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 99;
   top: -100%;
   transition: top 1s ease;
@@ -266,6 +272,7 @@
   width: 100%;
   height: 100%;
   top: 0px;
+  overflow: hidden;
   transition: top 1s ease;
   background-image: url('@|bg-1.jpg|')
 }
