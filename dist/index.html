@@ -415,8 +415,9 @@
           "total": 0
         },
         "show": function show() {
+          console.log(window.innerHeight, window.translationScale)
           this.data.height = window.innerHeight / window.translationScale; // 设置难度
-
+          console.log(this.data.height)
           this.setDifficulty(); // 图片与视窗的比例
 
           this.data.imageRatio = this.data.imageWidth / this.data.width;

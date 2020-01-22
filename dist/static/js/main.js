@@ -16,11 +16,12 @@ function getScale () {
     window.translationScaleY = window.innerHeight - deviseH * scale
     scaleBox.style.transformOrigin = `0 ${(window.translationScaleY) + 'px' } 0`
   } else {
-    window.translationScale = 1
+    
     window.translationScaleY = 1
     document.body.classList.add('pc')
     
     var scale = (window.innerHeight / deviseH).toFixed(2)
+    window.translationScale = scale
     scaleBox.style.width = deviseW + 'px'
     scaleBox.style.height = deviseH + 'px'
     scaleBox.style.transform = `scale(${scale}, ${scale}) translate(${(window.innerWidth - deviseW * scale) / 2 / scale + 'px' }, 0)`
